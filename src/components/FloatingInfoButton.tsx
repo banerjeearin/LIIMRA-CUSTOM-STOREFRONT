@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { Info, ShieldCheck, Truck, CreditCard, MessageCircle, RotateCcw, Award } from "lucide-react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { useState, useEffect, useRef, memo } from "react";
+import { Sprout, ShieldCheck, Truck, CreditCard, MessageCircle, RotateCcw, Award, X } from "lucide-react";
 
 const infoItems = [
   {
@@ -41,65 +40,122 @@ const infoItems = [
   },
 ];
 
-const FloatingInfoButton = () => {
+const FloatingInfoButton = memo(() => {
   const [open, setOpen] = useState(false);
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
 
   return (
     <>
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-[hsl(var(--liimra-forest))] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform duration-300 group"
-        aria-label="View certifications and support info"
-      >
-        <Info size={20} className="group-hover:rotate-12 transition-transform" />
-      </button>
+      <div className="fixed bottom-6 right-6 z-40" style={{ width: "48px", height: "80px" }}>
+        {/* Oxygen bubbles container — positioned to rise from sprout */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: "80px" }}>
+          <div className="bubble bubble-1" />
+          <div className="bubble bubble-2" />
+          <div className="bubble bubble-3" />
+          <div className="bubble bubble-4" />
+          <div className="bubble bubble-5" />
+        </div>
+        
+        <button
+          onClick={() => setOpen(!open)}
+          className="absolute bottom-0 left-0 w-12 h-12 rounded-full bg-[hsl(var(--liimra-forest))] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform duration-300 group ring-2 ring-white ring-inset"
+          aria-label="View certifications and support info"
+        >
+          <Sprout size={20} className="sprout-icon group-hover:scale-110 transition-transform" />
+        </button>
+      </div>
 
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="bottom" className="bg-[hsl(45_30%_95%)] border-t-[hsl(var(--liimra-border))] max-h-[80vh] rounded-t-3xl">
-          <SheetHeader className="pb-4">
-            <SheetTitle className="font-display text-2xl tracking-wide text-[hsl(var(--liimra-ink))]">
-              Why Trust Liimra?
-            </SheetTitle>
-            <SheetDescription className="font-body text-xs tracking-[0.1em] uppercase text-[hsl(var(--liimra-ink-light))]">
-              Certifications, guarantees & support — all in one place
-            </SheetDescription>
-          </SheetHeader>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-6 overflow-y-auto">
-            {infoItems.map((item) => (
-              <div
-                key={item.title}
-                className="flex gap-4 p-4 rounded-2xl border border-[hsl(var(--liimra-border))] bg-white/50 backdrop-blur-sm"
-              >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                  style={{ background: `hsl(${item.color} / 0.12)` }}
-                >
-                  <item.icon size={18} style={{ color: `hsl(${item.color})` }} />
+      {/* Chatbot-style floating popup */}
+      {open && (
+        <div 
+          ref={popupRef}
+          className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] animate-in slide-in-from-bottom-4 fade-in duration-300"
+        >
+          <div className="bg-white rounded-2xl shadow-2xl border border-[hsl(var(--liimra-border))] overflow-hidden">
+            {/* Header */}
+            <div className="bg-[hsl(var(--liimra-forest))] text-white p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                  <Sprout size={20} />
                 </div>
                 <div>
-                  <h4 className="font-body text-sm font-semibold tracking-wide text-[hsl(var(--liimra-ink))]">{item.title}</h4>
-                  <p className="font-body text-xs text-[hsl(var(--liimra-ink-light))] mt-0.5 leading-relaxed">{item.desc}</p>
+                  <h3 className="font-display text-lg font-bold tracking-wide">
+                    Why Trust Liimra?
+                  </h3>
+                  <p className="font-body text-xs text-white/80">
+                    Your questions answered
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
+              <button
+                onClick={() => setOpen(false)}
+                className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center transition-colors"
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
 
-          {/* WhatsApp CTA */}
-          <div className="border-t border-[hsl(var(--liimra-border))] pt-4 pb-2">
-            <a
-              href="https://wa.me/91XXXXXXXXXX"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-[hsl(142_55%_35%)] text-white font-body text-xs tracking-[0.15em] uppercase hover:scale-[1.02] transition-transform"
-            >
-              <MessageCircle size={16} /> Ask on WhatsApp
-            </a>
+            {/* Content - Scrollable */}
+            <div className="max-h-[60vh] overflow-y-auto p-4 space-y-3 bg-[hsl(45_30%_98%)]">
+              {infoItems.map((item, index) => (
+                <div
+                  key={item.title}
+                  className="flex gap-3 p-3 rounded-xl border border-[hsl(var(--liimra-border))] bg-white shadow-sm hover:shadow-md transition-shadow animate-in slide-in-from-right duration-300"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <div
+                    className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ background: `hsl(${item.color} / 0.12)` }}
+                  >
+                    <item.icon size={16} style={{ color: `hsl(${item.color})` }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-body text-sm font-semibold tracking-wide text-[hsl(var(--liimra-ink))]">
+                      {item.title}
+                    </h4>
+                    <p className="font-body text-xs text-[hsl(var(--liimra-ink-light))] mt-1 leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer with CTA */}
+            <div className="p-4 bg-white border-t border-[hsl(var(--liimra-border))]">
+              <a
+                href="https://wa.me/91XXXXXXXXXX"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-[hsl(142_55%_35%)] text-white font-body text-xs tracking-[0.15em] uppercase hover:scale-[1.02] hover:shadow-lg transition-all"
+              >
+                <MessageCircle size={16} /> Ask on WhatsApp
+              </a>
+            </div>
           </div>
-        </SheetContent>
-      </Sheet>
+        </div>
+      )}
     </>
   );
-};
+});
+
+FloatingInfoButton.displayName = "FloatingInfoButton";
 
 export default FloatingInfoButton;

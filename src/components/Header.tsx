@@ -1,30 +1,31 @@
-import { useState } from "react";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { useState, memo } from "react";
+import { ShoppingBag, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { useCart } from "@/contexts/CartContext";
 
-const navItems = ["Shop", "Bundles", "Our Millets", "Recipes", "About"];
+const navItems = ["Shop", "Bundles", "Recipes", "About"];
 
-interface HeaderProps {
-  cartCount: number;
-}
-
-const Header = ({ cartCount }: HeaderProps) => {
+const Header = memo(() => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { cartCount, openCart } = useCart();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[hsl(45_30%_95%/0.85)] border-b border-[hsl(var(--liimra-border))]">
       {/* Announcement bar */}
       <div className="bg-[hsl(var(--liimra-forest))] text-[hsl(45_30%_95%)] text-center py-1.5 font-body text-xs tracking-widest uppercase">
-        Free shipping above ₹299 · COD Available · Ships in 48hrs
+        Free shipping above ₹299 · COD Available · Because healthy shouldn't cost more
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 sm:h-16">
         {/* Logo */}
-        <a href="#" className="font-display text-xl sm:text-2xl font-bold tracking-[0.15em] text-[hsl(var(--liimra-ink))]">
-          LIIMRA
-          <span className="block text-[8px] sm:text-[9px] tracking-[0.35em] font-body font-light -mt-1 text-[hsl(var(--liimra-ink-light))]">
-            NATURALS
-          </span>
+        <a href="#" className="flex items-center">
+          <img 
+            src="/liimra-logo.png" 
+            alt="Liimra Naturals" 
+            loading="eager"
+            decoding="async"
+            className="h-10 sm:h-12 w-auto"
+          />
         </a>
 
         {/* Desktop Nav */}
@@ -42,10 +43,16 @@ const Header = ({ cartCount }: HeaderProps) => {
 
         {/* Right: Cart + Mobile Menu */}
         <div className="flex items-center gap-3">
-          <button className="relative p-2 rounded-full hover:bg-[hsl(var(--liimra-sage-light)/0.5)] transition-colors">
+          <button
+            onClick={openCart}
+            className="relative p-2 rounded-full hover:bg-[hsl(var(--liimra-sage-light)/0.5)] transition-colors"
+          >
             <ShoppingBag size={20} className="text-[hsl(var(--liimra-ink))]" />
             {cartCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-[hsl(var(--liimra-terra))] text-white text-[10px] font-body font-bold rounded-full flex items-center justify-center">
+              <span
+                className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 text-white text-[10px] font-body font-bold rounded-full flex items-center justify-center"
+                style={{ background: "#aeb30a", color: "#3e4c1d" }}
+              >
                 {cartCount}
               </span>
             )}
@@ -59,7 +66,15 @@ const Header = ({ cartCount }: HeaderProps) => {
               </button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-[hsl(45_30%_95%)] border-l-[hsl(var(--liimra-border))] w-72">
-              <SheetTitle className="font-display text-lg tracking-[0.15em] text-[hsl(var(--liimra-ink))]">LIIMRA NATURALS</SheetTitle>
+              <SheetTitle className="flex items-center">
+                <img 
+                  src="/liimra-logo.png" 
+                  alt="Liimra Naturals" 
+                  loading="eager"
+                  decoding="async"
+                  className="h-8 w-auto"
+                />
+              </SheetTitle>
               <nav className="flex flex-col gap-2 mt-8">
                 {navItems.map((item) => (
                   <a
@@ -78,6 +93,8 @@ const Header = ({ cartCount }: HeaderProps) => {
       </div>
     </header>
   );
-};
+});
+
+Header.displayName = "Header";
 
 export default Header;
