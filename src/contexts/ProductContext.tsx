@@ -14,11 +14,11 @@ interface ProductContextType {
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
 const goalProducts: Record<string, string[]> = {
-  all: ["ragi", "jowar", "bajra", "kangni", "kutki", "rice"],
-  sugar: ["ragi", "jowar", "kangni"],
-  weight: ["jowar", "ragi", "kangni", "kutki"],
-  nutrition: ["ragi", "bajra", "jowar"],
-  gut: ["kutki", "rice", "bajra"],
+  all: ["ragi", "jowar", "bajra", "kangni", "kutki", "kodo", "rice-flour", "indrayani-rice"],
+  sugar: ["ragi", "jowar", "kangni", "kutki"],
+  weight: ["jowar", "kangni", "kutki", "kodo"],
+  nutrition: ["ragi", "bajra", "jowar", "kangni"],
+  gut: ["kutki", "kodo", "bajra", "indrayani-rice"],
 };
 
 export const ProductProvider = ({ children }: { children: ReactNode }) => {
@@ -40,7 +40,10 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
 
   const getProductsByGoal = (goal: string) => {
     const productIds = goalProducts[goal] || goalProducts.all;
-    return products.filter((p) => productIds.includes(p.id));
+    return products.filter((p) => {
+      const slug = p.displayName.toLowerCase().trim().replace(/\s+/g, "-");
+      return productIds.includes(slug);
+    });
   };
 
   if (error) {

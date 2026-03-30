@@ -3,6 +3,8 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
+import { useImpressionTracker } from "@/hooks/useImpressionTracker";
+import { ProductSchema } from "@/components/SEO/StructuredData";
 import type { Product } from "@/data/products";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
@@ -37,12 +39,15 @@ const ProductCard = memo(({ product }: { product: Product }) => {
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
   const [scienceExpanded, setScienceExpanded] = useState(false);
   const { addItem, openCart } = useCart();
+  const cardRef = useImpressionTracker(`ProductCard_${product.id}`, { product_id: product.id, name: product.name });
 
   const selectedSize = product.sizes[selectedSizeIndex];
   const pct = Math.round(((selectedSize.mrp - selectedSize.price) / selectedSize.mrp) * 100);
   const backdropWord = product.name.split(" ")[0].toUpperCase();
 
   const handleAddToCart = () => {
+    // E-commerce tracking is handled via Cart actions or explicit trackEcommerce
+    // We'll leave that to the CartContext or here
     addItem({
       productId: product.id,
       variantId: selectedSize.variantId || `${product.id}-${selectedSize.size}`,
@@ -58,16 +63,18 @@ const ProductCard = memo(({ product }: { product: Product }) => {
 
   return (
     <div
+      ref={cardRef as any}
       className="relative bg-white rounded-3xl overflow-hidden transition-all duration-500 group"
       style={{
         boxShadow: hovered ? CARD_SHADOW_HOVER : CARD_SHADOW,
-        transform: hovered ? "translate3d(0, -3px, 0)" : "translate3d(0, 0, 0)",
+        transform: hovered ? "translateY(-4px)" : "translateY(0)",
         minHeight: "300px",
         willChange: hovered ? "transform, box-shadow" : "auto",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
+      <ProductSchema product={product} />
       <div
         aria-hidden="true"
         className="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden"
@@ -271,9 +278,10 @@ const ProductCard = memo(({ product }: { product: Product }) => {
                 <p className="font-body text-xs font-semibold mb-1" style={{ color: OLIVE }}>
                   {product.commonName} · {product.scientificName}
                 </p>
-                <p className="font-body text-xs leading-relaxed text-[hsl(var(--liimra-ink-mid))]">
-                  {product.detailedDescription}
-                </p>
+                <div
+                  className="font-body text-xs leading-relaxed text-[hsl(var(--liimra-ink-mid))] product-description"
+                  dangerouslySetInnerHTML={{ __html: product.detailedDescription }}
+                />
               </div>
 
               <div
@@ -407,9 +415,8 @@ const GoalSelectorSection = memo(() => {
 
   return (
     <section
-      ref={sectionRef}
       id="shop"
-      className="relative bg-[hsl(var(--liimra-cream))] scroll-reveal"
+      className="relative bg-[hsl(var(--liimra-cream))]"
       style={{ padding: "96px 0" }}
     >
       <div className="max-w-6xl mx-auto px-6">
@@ -447,7 +454,7 @@ const GoalSelectorSection = memo(() => {
           ))}
         </div>
 
-        <div ref={productsRef} className="flex flex-col gap-5 scroll-reveal-stagger">
+        <div className="flex flex-col gap-5">
           {visibleProducts.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}

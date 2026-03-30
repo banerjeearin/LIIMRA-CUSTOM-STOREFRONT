@@ -1,6 +1,7 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from "react";
 import type { CartItem } from "@/services/api/types";
 import { productAPI } from "@/services/api/productService";
+import { useAnalytics } from "@/contexts/AnalyticsContext";
 
 interface CartContextType {
   cart: CartItem[];
@@ -45,6 +46,7 @@ const saveCartToStorage = (cart: CartItem[]) => {
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>(loadCartFromStorage);
   const [isOpen, setIsOpen] = useState(false);
+  const { trackEcommerce } = useAnalytics();
 
   useEffect(() => {
     saveCartToStorage(cart);
@@ -56,6 +58,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const total = subtotal + shipping;
 
   const addItem = (newItem: Omit<CartItem, "id">) => {
+    trackEcommerce("AddToCart", { 
+      content_ids: [newItem.productId],
+      content_type: 'product',
+      value: newItem.price * newItem.quantity,
+      currency: "INR"
+    });
+
     setCart((prevCart) => {
       const existingItemIndex = prevCart.findIndex(
         (item) => item.productId === newItem.productId && item.variantId === newItem.variantId
@@ -98,6 +107,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const closeCart = () => setIsOpen(false);
 
   const proceedToCheckout = async () => {
+    trackEcommerce("InitiateCheckout", {
+      content_ids: cart.map(i => i.productId),
+      value: total,
+      currency: "INR"
+    });
+
     try {
       const { checkoutUrl } = await productAPI.createCheckout(cart);
       window.location.href = checkoutUrl;

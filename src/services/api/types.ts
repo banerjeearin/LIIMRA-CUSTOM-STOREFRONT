@@ -23,18 +23,24 @@ export interface Cart {
 export interface ShopifyProduct {
   id: string;
   title: string;
-  description: string;
-  images: Array<{ src: string }>;
-  variants: Array<{
-    id: string;
-    title: string;
-    price: string;
-    compareAtPrice?: string;
-  }>;
+  descriptionHtml: string;
+  images: {
+    edges: Array<{ node: { url: string; src?: string } }>;
+  };
+  variants: {
+    edges: Array<{
+      node: {
+        id: string;
+        title: string;
+        price: { amount: string };
+        compareAtPrice?: { amount: string } | null;
+      };
+    }>;
+  };
   metafields?: Array<{
     key: string;
     value: string;
-  }>;
+  } | null>;
   tags: string[];
 }
 

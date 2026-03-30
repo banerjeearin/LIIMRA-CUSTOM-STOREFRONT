@@ -12,6 +12,9 @@ import WhyLiimraSection from "@/components/WhyLiimraSection";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import { SEO } from "@/components/SEO/SEO";
+import { OrganizationSchema, FAQSchema } from "@/components/SEO/StructuredData";
+import { useImpressionTracker } from "@/hooks/useImpressionTracker";
 
 const deckCards = [
   { id: "bajra",  name: "Bajra Flour",  image: "/products/bajra-250gm.png" },
@@ -145,6 +148,9 @@ const Index = () => {
 
   return (
     <div className="relative">
+      <SEO />
+      <OrganizationSchema />
+      <FAQSchema />
       <ScrollProgress />
       <Header />
 

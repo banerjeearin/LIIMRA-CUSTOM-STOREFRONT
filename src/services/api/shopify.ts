@@ -28,12 +28,13 @@ const shopifyFetch = async (query: string, variables?: Record<string, unknown>) 
   return json.data;
 };
 
-const parseMetafield = (metafields: Array<{ key: string; value: string }>, key: string): string => {
-  const field = metafields?.find((m) => m.key === key);
+const parseMetafield = (metafields: Array<{ key: string; value: string } | null>, key: string): string => {
+  // Shopify returns null entries for metafields that don't exist on the product
+  const field = metafields?.filter(Boolean).find((m) => m!.key === key);
   return field?.value || "";
 };
 
-const parseMetafieldJSON = (metafields: Array<{ key: string; value: string }>, key: string): unknown => {
+const parseMetafieldJSON = (metafields: Array<{ key: string; value: string } | null>, key: string): unknown => {
   const value = parseMetafield(metafields, key);
   if (!value) return null;
   try {
@@ -44,11 +45,16 @@ const parseMetafieldJSON = (metafields: Array<{ key: string; value: string }>, k
 };
 
 const mapShopifyProductToProduct = (shopifyProduct: ShopifyProduct): Product => {
-  const metafields = shopifyProduct.metafields || [];
-  
-  const sizes: ProductSize[] = shopifyProduct.variants.map((variant) => {
-    const price = parseFloat(variant.price);
-    const mrp = variant.compareAtPrice ? parseFloat(variant.compareAtPrice) : price;
+  // Filter out null entries — Shopify returns null for metafields not set on a product
+  const metafields = (shopifyProduct.metafields || []).filter(Boolean) as Array<{ key: string; value: string }>;
+
+  // Unwrap edges/node from Storefront API response
+  const variantNodes = shopifyProduct.variants?.edges?.map((e) => e.node) || [];
+  const imageNodes = shopifyProduct.images?.edges?.map((e) => e.node) || [];
+
+  const sizes: ProductSize[] = variantNodes.map((variant) => {
+    const price = parseFloat(variant.price.amount);
+    const mrp = variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount) : price;
     const discount = mrp > price ? Math.round(((mrp - price) / mrp) * 100) : 0;
 
     return {
@@ -76,8 +82,12 @@ const mapShopifyProductToProduct = (shopifyProduct: ShopifyProduct): Product => 
     textLight: "0 0% 40%",
   };
 
-  const id = parseMetafield(metafields, "product_id") || shopifyProduct.id;
   const displayName = parseMetafield(metafields, "display_name") || shopifyProduct.title;
+
+  // Derive a stable slug from display_name (e.g. "RAGI" → "ragi", "RICE FLOUR" → "rice-flour")
+  const idFromMetafield = parseMetafield(metafields, "product_id");
+  const id = idFromMetafield ||
+    (displayName ? displayName.toLowerCase().trim().replace(/\s+/g, "-") : shopifyProduct.id);
   const scientificName = parseMetafield(metafields, "scientific_name") || "";
   const commonName = parseMetafield(metafields, "common_name") || "";
   const emoji = parseMetafield(metafields, "emoji") || "🌾";
@@ -86,7 +96,7 @@ const mapShopifyProductToProduct = (shopifyProduct: ShopifyProduct): Product => 
   const tagline = parseMetafield(metafields, "tagline") || "";
   const primaryBenefit = parseMetafield(metafields, "primary_benefit") || "";
   const benefitDescription = parseMetafield(metafields, "benefit_description") || "";
-  const detailedDescription = parseMetafield(metafields, "detailed_description") || shopifyProduct.description;
+  const detailedDescription = parseMetafield(metafields, "detailed_description") || shopifyProduct.descriptionHtml;
   const scientificHighlight = parseMetafield(metafields, "scientific_highlight") || "";
   const imageBg = parseMetafield(metafields, "image_bg") || "linear-gradient(160deg, hsl(0 0% 30%), hsl(0 0% 20%))";
 
@@ -117,7 +127,7 @@ const mapShopifyProductToProduct = (shopifyProduct: ShopifyProduct): Product => 
     recipes,
     uses,
     colorTheme,
-    image: shopifyProduct.images[0]?.src || "",
+    image: imageNodes[0]?.url || imageNodes[0]?.src || "",
     imageBg,
     tagline,
   };
@@ -132,7 +142,7 @@ export const shopifyService: APIService = {
             node {
               id
               title
-              description
+              descriptionHtml
               images(first: 5) {
                 edges {
                   node {

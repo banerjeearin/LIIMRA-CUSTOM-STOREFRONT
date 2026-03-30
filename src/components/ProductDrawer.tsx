@@ -3,6 +3,7 @@ import { ShoppingCart, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
+import { useAnalytics } from "@/contexts/AnalyticsContext";
 import { sendProductInquiry } from "@/services/whatsapp";
 
 const OLIVE = "#3e4c1d";
@@ -18,13 +19,23 @@ interface ProductDrawerProps {
 const ProductDrawer = memo(({ isOpen, onClose, productId, onNavigate }: ProductDrawerProps) => {
   const { products, getProduct } = useProducts();
   const { addItem, openCart } = useCart();
+  const { trackEcommerce } = useAnalytics();
   const [selectedSize, setSelectedSize] = useState(0);
 
   const product = useMemo(() => (productId ? getProduct(productId) : null), [productId, getProduct]);
 
   useEffect(() => {
     setSelectedSize(0);
-  }, [productId]);
+    if (product && isOpen) {
+      trackEcommerce("ViewContent", {
+        content_ids: [product.id],
+        content_name: product.name,
+        content_type: 'product',
+        currency: "INR",
+        value: product.sizes[0].price
+      });
+    }
+  }, [productId, product, isOpen, trackEcommerce]);
 
   const { currentSize, currentIndex, prevProduct, nextProduct } = useMemo(() => {
     if (!product) return { currentSize: null, currentIndex: -1, prevProduct: null, nextProduct: null };
@@ -166,9 +177,11 @@ const ProductDrawer = memo(({ isOpen, onClose, productId, onNavigate }: ProductD
             <p className="font-body text-xs font-semibold mb-2" style={{ color: OLIVE }}>
               {product.commonName} · {product.scientificName}
             </p>
-            <p className="font-body text-sm leading-relaxed mb-4" style={{ color: "hsl(var(--liimra-ink-mid))" }}>
-              {product.detailedDescription}
-            </p>
+            <div
+              className="font-body text-sm leading-relaxed mb-4 product-description"
+              style={{ color: "hsl(var(--liimra-ink-mid))" }}
+              dangerouslySetInnerHTML={{ __html: product.detailedDescription }}
+            />
             <div
               className="inline-flex items-center gap-2 font-body text-xs font-bold px-3 py-1.5 rounded-full mb-4"
               style={{ background: `${NEON}18`, color: OLIVE }}

@@ -251,7 +251,7 @@ All environment variables are optional. The app works perfectly without them usi
 |----------|---------|---------|
 | `VITE_SHOPIFY_STORE_DOMAIN` | - | Your Shopify store domain |
 | `VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN` | - | Storefront API access token |
-| `VITE_WHATSAPP_NUMBER` | `919876543210` | WhatsApp contact number |
+| `VITE_WHATSAPP_NUMBER` | `919321731372` | WhatsApp contact number |
 | `VITE_CONTACT_EMAIL` | `hello@liimra.com` | Support email |
 | `VITE_FREE_SHIPPING_THRESHOLD` | `299` | Free shipping threshold (₹) |
 | `VITE_STANDARD_SHIPPING_COST` | `40` | Standard shipping cost (₹) |
