@@ -40,10 +40,16 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
 
   const getProductsByGoal = (goal: string) => {
     const productIds = goalProducts[goal] || goalProducts.all;
-    return products.filter((p) => {
-      const slug = p.displayName.toLowerCase().trim().replace(/\s+/g, "-");
-      return productIds.includes(slug);
-    });
+    return products
+      .filter((p) => {
+        const slug = p.displayName?.toLowerCase().trim().replace(/\s+/g, "-") || p.id;
+        return productIds.includes(slug);
+      })
+      .sort((a, b) => {
+        const slugA = a.displayName?.toLowerCase().trim().replace(/\s+/g, "-") || a.id;
+        const slugB = b.displayName?.toLowerCase().trim().replace(/\s+/g, "-") || b.id;
+        return productIds.indexOf(slugA) - productIds.indexOf(slugB);
+      });
   };
 
   if (error) {

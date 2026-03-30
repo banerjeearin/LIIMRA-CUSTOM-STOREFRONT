@@ -6,6 +6,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useImpressionTracker } from "@/hooks/useImpressionTracker";
 import { ProductSchema } from "@/components/SEO/StructuredData";
 import type { Product } from "@/data/products";
+import ViewingNow from "@/components/ViewingNow";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 const OLIVE = "#3e4c1d";
@@ -144,10 +145,7 @@ const ProductCard = memo(({ product }: { product: Product }) => {
               <Stars rating={product.rating} />
               <span className="font-body text-xs text-[hsl(var(--liimra-ink-light))]">({product.reviews})</span>
             </div>
-            <span className="font-body text-[10px] text-[hsl(var(--liimra-ink-light))] flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full animate-pulse inline-block" style={{ background: NEON }} />
-              viewing now
-            </span>
+            <ViewingNow dotColor={NEON} />
           </div>
 
           <div>

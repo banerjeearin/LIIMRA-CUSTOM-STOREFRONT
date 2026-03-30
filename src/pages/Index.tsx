@@ -12,6 +12,7 @@ import WhyLiimraSection from "@/components/WhyLiimraSection";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import ViewingNow from "@/components/ViewingNow";
 import { SEO } from "@/components/SEO/SEO";
 import { OrganizationSchema, FAQSchema } from "@/components/SEO/StructuredData";
 import { useImpressionTracker } from "@/hooks/useImpressionTracker";
@@ -37,7 +38,7 @@ const BASE_CARD_CONFIG = [
 
 function getDeckParams(width: number) {
   if (width < 400) {
-    // Very small phones — tight 3-card fan, hide outer cards
+    // Very small phones â€” tight 3-card fan, hide outer cards
     return { cardWidth: 140, scale: 0.42, deckTop: 430, deckHeight: 280, paddingBottom: 150 };
   }
   if (width < 640) {
@@ -154,7 +155,7 @@ const Index = () => {
       <ScrollProgress />
       <Header />
 
-      {/* ── Hero section ── */}
+      {/* â”€â”€ Hero section â”€â”€ */}
       <section
         className="relative bg-[hsl(var(--liimra-cream))]"
         style={{ minHeight: "100vh", paddingBottom: `${paddingBottom}px`, overflow: "hidden" }}
@@ -246,13 +247,13 @@ const Index = () => {
               }
             `}</style>
 
-            {/* Stats row — matrix layout */}
+            {/* Stats row â€” matrix layout */}
             <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-10 mt-8">
               {[
-                { value: "4.9★", label: "Rating" },
+                { value: "4.9â˜…", label: "Rating" },
                 { value: "1,400+", label: "Families" },
                 { value: "48hr", label: "Dispatch" },
-                { value: "₹0", label: "COD Fee" },
+                { value: "â‚¹0", label: "COD Fee" },
               ].map((m) => (
                 <div key={m.label} className="text-center">
                   <div className="font-display text-xl sm:text-3xl font-black text-[hsl(var(--liimra-forest))]">{m.value}</div>
@@ -264,7 +265,7 @@ const Index = () => {
             {/* Primary CTA */}
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-7">
               <a href="#shop" className="font-body text-sm tracking-[0.12em] uppercase px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[hsl(var(--liimra-forest))] text-[hsl(var(--liimra-cream))] hover:scale-105 transition-transform duration-300 shadow-xl font-semibold" style={{ willChange: "transform" }}>
-                Shop Now — From ₹99
+                Shop Now â€” From â‚¹99
               </a>
               <a href="#bundles" className="font-body text-sm tracking-[0.12em] uppercase px-8 sm:px-10 py-4 sm:py-5 rounded-full border-2 border-[hsl(var(--liimra-forest))] text-[hsl(var(--liimra-forest))] hover:bg-[hsl(var(--liimra-forest)/0.05)] transition-all duration-300 font-semibold" style={{ willChange: "background-color" }}>
                 View Bundles
@@ -272,16 +273,11 @@ const Index = () => {
             </div>
             
             {/* Social proof indicator */}
-            <div className="flex items-center justify-center gap-2 mt-5">
-              <span className="w-2 h-2 bg-[hsl(142_55%_40%)] rounded-full animate-pulse" />
-              <span className="font-body text-[10px] tracking-[0.15em] uppercase text-[hsl(var(--liimra-ink-light))]">
-                31 people viewing now
-              </span>
-            </div>
+            <ViewingNow className="justify-center mt-5" dotColor="hsl(142_55%_40%)" />
           </div>
         </div>
 
-        {/* ── Fanned product deck ── */}
+        {/* â”€â”€ Fanned product deck â”€â”€ */}
         <div
           className="absolute left-0 right-0 flex justify-center items-end pointer-events-none"
           style={{ top: `${deckTop}px`, height: `${deckHeight}px`, perspective: "1600px", zIndex: 20 }}
@@ -328,274 +324,419 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ── Differentiation section ── */}
+      {/* â”€â”€ Differentiation section â”€â”€ */}
       <section
         className="relative overflow-hidden"
-        style={{ background: "#3e4c1d", minHeight: "100vh", display: "flex", alignItems: "center" }}
+        style={{ background: "#3e4c1d", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", padding: "80px 40px 100px", position: "relative" }}
       >
-        <div style={{ width: "100%", maxWidth: "1155px", margin: "0 auto", padding: "64px 40px" }}>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-          {/* Styles for badges */}
-          <style>{`
-            .diff-badge {
-              display: inline-flex;
-              align-items: center;
-              gap: 6px;
-              background: #aeb30a;
-              border-radius: 9999px;
-              padding: 6px 16px;
-              white-space: nowrap;
-              position: relative;
-              overflow: visible;
-            }
-            .diff-badge span {
-              font-family: 'Inter', sans-serif;
-              font-weight: 800;
-              font-size: 11px;
-              letter-spacing: 1.4px;
-              color: #ffffff;
-              text-transform: uppercase;
-              line-height: 1;
-            }
-          `}</style>
+          .diff-bg-circle {
+            position: absolute;
+            width: 600px; height: 600px;
+            border-radius: 50%;
+            border: 1px solid rgba(197,217,58,0.08);
+            top: -200px; right: -150px;
+            pointer-events: none;
+          }
+          .diff-bg-circle-2 {
+            position: absolute;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            border: 1px solid rgba(197,217,58,0.06);
+            bottom: -100px; left: -100px;
+            pointer-events: none;
+          }
+          .diff-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(197,217,58,0.06) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+          }
+          .diff-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(197,217,58,0.12);
+            border: 1px solid rgba(197,217,58,0.25);
+            border-radius: 100px;
+            padding: 8px 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #c5d93a;
+            margin-bottom: 48px;
+            animation: diffFadeUp 0.6s ease 0.0s both;
+          }
+          .diff-eyebrow-dot {
+            width: 6px; height: 6px;
+            background: #c5d93a;
+            border-radius: 50%;
+            animation: diffPulseDot 2s ease-in-out infinite;
+          }
+          @keyframes diffPulseDot {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.7); }
+          }
+          .diff-hero {
+            text-align: center;
+            max-width: 860px;
+            margin-bottom: 72px;
+            position: relative;
+            animation: diffFadeUp 0.6s ease 0.15s both;
+          }
+          .diff-headline-top {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(52px, 8vw, 96px);
+            font-weight: 900;
+            line-height: 1;
+            color: #f5f0e8;
+            letter-spacing: -0.02em;
+            display: block;
+          }
+          .diff-headline-accent {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(52px, 8vw, 96px);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            color: #c5d93a;
+            display: block;
+            position: relative;
+          }
+          .diff-headline-accent::after {
+            content: '';
+            position: absolute;
+            bottom: 2px; left: 50%;
+            transform: translateX(-50%);
+            width: 80%; height: 3px;
+            background: #c5d93a;
+            opacity: 0.4;
+            border-radius: 2px;
+          }
+          .diff-headline-sub {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(34px, 5vw, 60px);
+            font-weight: 400;
+            font-style: italic;
+            color: rgba(245,240,232,0.55);
+            display: block;
+            margin-top: 4px;
+            letter-spacing: -0.01em;
+          }
+          .diff-badge-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 32px;
+          }
+          .diff-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #c5d93a;
+            color: #2d3714;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 7px 16px;
+            border-radius: 100px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+          }
+          .diff-subhead {
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.7;
+            color: rgba(245,240,232,0.5);
+            text-align: center;
+            max-width: 540px;
+            margin: 0 auto 72px;
+            letter-spacing: 0.01em;
+            animation: diffFadeUp 0.6s ease 0.25s both;
+          }
+          .diff-divider {
+            width: 60px; height: 1px;
+            background: rgba(197,217,58,0.3);
+            margin: 0 auto 48px;
+            animation: diffFadeUp 0.6s ease 0.3s both;
+          }
+          .diff-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            width: 100%;
+            max-width: 900px;
+            background: rgba(197,217,58,0.08);
+            border: 1px solid rgba(197,217,58,0.12);
+            border-radius: 20px;
+            overflow: hidden;
+            animation: diffFadeUp 0.7s ease 0.35s both;
+          }
+          .diff-feature {
+            background: rgba(30,38,12,0.6);
+            padding: 36px 32px;
+            position: relative;
+            cursor: default;
+            transition: background 0.3s ease;
+          }
+          .diff-feature:hover { background: rgba(40,52,16,0.9); }
+          .diff-feature::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: #c5d93a;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+          .diff-feature:hover::before { opacity: 1; }
+          .diff-feature-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 11px;
+            font-weight: 400;
+            color: rgba(197,217,58,0.4);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: block;
+          }
+          .diff-feature-icon {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: rgba(197,217,58,0.1);
+            border: 1px solid rgba(197,217,58,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+          }
+          .diff-feature-title {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #c5d93a;
+            margin-bottom: 12px;
+          }
+          .diff-feature-desc {
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.75;
+            color: rgba(245,240,232,0.6);
+          }
+          .diff-feature-stat {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 4px;
+            margin-top: 20px;
+            padding: 8px 14px;
+            background: rgba(197,217,58,0.08);
+            border: 1px solid rgba(197,217,58,0.15);
+            border-radius: 8px;
+          }
+          .diff-stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #c5d93a;
+            line-height: 1;
+          }
+          .diff-stat-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(197,217,58,0.6);
+            letter-spacing: 0.06em;
+          }
+          .diff-compare-banner {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(197,217,58,0.06);
+            border: 1px solid rgba(197,217,58,0.12);
+            border-radius: 14px;
+            padding: 20px 32px;
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            animation: diffFadeUp 0.6s ease 0.5s both;
+          }
+          .diff-compare-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(197,217,58,0.5);
+            white-space: nowrap;
+            flex-shrink: 0;
+          }
+          .diff-compare-bar { flex: 1; display: flex; gap: 8px; }
+          .diff-bar-item { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+          .diff-bar-track {
+            height: 5px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 3px;
+            overflow: hidden;
+          }
+          .diff-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: #c5d93a;
+          }
+          .diff-bar-fill-dim { background: rgba(255,255,255,0.15); }
+          .diff-bar-name { font-size: 10px; color: rgba(245,240,232,0.4); font-weight: 500; letter-spacing: 0.06em; }
+          .diff-cta-strip {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: diffFadeUp 0.6s ease 0.55s both;
+          }
+          .diff-cta-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #c5d93a;
+            color: #2d3714;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 16px 32px;
+            border-radius: 100px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(197,217,58,0.25);
+          }
+          .diff-cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(197,217,58,0.35);
+          }
+          .diff-cta-secondary {
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(245,240,232,0.5);
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            text-decoration-color: rgba(245,240,232,0.2);
+            transition: color 0.2s;
+            background: none;
+            border: none;
+          }
+          .diff-cta-secondary:hover { color: rgba(245,240,232,0.8); }
+          @keyframes diffFadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+        `}</style>
 
-          {/* Headline block */}
-          <div style={{ position: "relative", marginBottom: "96px" }}>
+        {/* Background decorations */}
+        <div className="diff-bg-circle" />
+        <div className="diff-bg-circle-2" />
 
-            {/* Main headline — zIndex 1, badges sit on top at zIndex 3 */}
-            <p style={{ fontFamily: "'Arial Black', 'Arial', sans-serif", fontWeight: 900, fontSize: "clamp(2.4rem, 7.5vw, 82px)", lineHeight: 1.12, letterSpacing: "-1.848px", color: "#000000", textTransform: "uppercase", textAlign: "center", margin: 0, position: "relative", zIndex: 1 }}>
-              Not all millet flour is the same
-            </p>
+        {/* Eyebrow */}
+        <div className="diff-eyebrow">
+          <div className="diff-eyebrow-dot" />
+          The Liimra Difference
+        </div>
 
-            {/* Pill: 100% NATURAL — over "NOT ALL", first line, left side */}
-            <div
-              className={`diff-badge ${hoveredBadge === 0 ? 'badge-sparkle-container' : ''}`}
-              style={{
-                position: "absolute",
-                left: "clamp(16px, 12%, 160px)",
-                top: "clamp(8px, 2.5vw, 36px)",
-                zIndex: 3,
-                transform: "rotate(-6deg)",
-              } as React.CSSProperties}
-              onMouseEnter={() => setHoveredBadge(0)}
-              onMouseLeave={() => setHoveredBadge(null)}
-            >
-              {hoveredBadge === 0 && (
-                <div className="badge-sparkle-wrapper">
-                  <div className="sparkle sparkle-1" />
-                  <div className="sparkle sparkle-2" />
-                  <div className="sparkle sparkle-3" />
-                  <div className="sparkle sparkle-4" />
-                  <div className="sparkle sparkle-5" />
-                  <div className="sparkle sparkle-6" />
-                  <div className="sparkle sparkle-7" />
-                  <div className="sparkle sparkle-8" />
-                  <div className="sparkle sparkle-9" />
-                  <div className="sparkle sparkle-10" />
-                  <div className="sparkle sparkle-11" />
-                  <div className="sparkle sparkle-12" />
-                  <div className="sparkle sparkle-13" />
-                  <div className="sparkle sparkle-14" />
-                  <div className="sparkle sparkle-15" />
-                  <div className="sparkle sparkle-16" />
-                  <div className="sparkle sparkle-17" />
-                  <div className="sparkle sparkle-18" />
-                  <div className="sparkle sparkle-19" />
-                  <div className="sparkle sparkle-20" />
-                  <div className="sparkle sparkle-21" />
-                  <div className="sparkle sparkle-22" />
-                  <div className="sparkle sparkle-23" />
-                  <div className="sparkle sparkle-24" />
-                  <div className="sparkle sparkle-25" />
-                  <div className="sparkle sparkle-26" />
-                  <div className="sparkle sparkle-27" />
-                  <div className="sparkle sparkle-28" />
-                  <div className="sparkle sparkle-29" />
-                  <div className="sparkle sparkle-30" />
-                  <div className="sparkle sparkle-31" />
-                  <div className="sparkle sparkle-32" />
-                  <div className="sparkle sparkle-33" />
-                  <div className="sparkle sparkle-34" />
-                  <div className="sparkle sparkle-35" />
-                  <div className="sparkle sparkle-36" />
-                  <div className="sparkle sparkle-37" />
-                  <div className="sparkle sparkle-38" />
-                  <div className="sparkle sparkle-39" />
-                  <div className="sparkle sparkle-40" />
-                </div>
-              )}
-              <svg viewBox="0 0 24 24" style={{ width: 12, height: 12, stroke: "white", fill: "none", strokeWidth: 2.5, flexShrink: 0 }}>
-                <path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z" />
-                <path d="M8 12l3 3 5-5" />
-              </svg>
-              <span>100% Natural</span>
+        {/* Hero headline */}
+        <div className="diff-hero">
+          <span className="diff-headline-top">Not all millet flour</span>
+          <span className="diff-headline-accent">is the same.</span>
+          <span className="diff-headline-sub">Here&#39;s what sets Liimra apart.</span>
+
+          <div className="diff-badge-row">
+            <div className="diff-badge-pill" style={{ transform: "rotate(-1.5deg)" }}>&#10003; 100% Natural</div>
+            <div className="diff-badge-pill" style={{ transform: "rotate(1deg)" }}>&#128666; Shipping within 48 Hrs</div>
+            <div className="diff-badge-pill" style={{ transform: "rotate(-0.8deg)" }}>&#9881; Chakki-Fresh</div>
+          </div>
+        </div>
+
+        {/* Subhead */}
+        <p className="diff-subhead">
+          Most flours on supermarket shelves are machine-processed at high heat &mdash; destroying the very nutrients you&#39;re paying for. Here&#39;s how Liimra compares.
+        </p>
+
+        {/* Divider */}
+        <div className="diff-divider" />
+
+        {/* Feature grid */}
+        <div className="diff-features">
+          <div className="diff-feature">
+            <span className="diff-feature-num">01</span>
+            <div className="diff-feature-icon">&#127806;</div>
+            <div className="diff-feature-title">Low Glycaemic Index</div>
+            <p className="diff-feature-desc">Recommended by nutritionists for balanced, diabetes-friendly meal plans.</p>
+            <div className="diff-feature-stat">
+              <span className="diff-stat-num">Low</span>
+              <span className="diff-stat-label">GI Rating</span>
             </div>
-
-            {/* Pill: 48 HR. MAX SHELF AGE — over "ALL MILLET", first line, centre */}
-            <div
-              className={`diff-badge ${hoveredBadge === 1 ? 'badge-sparkle-container' : ''}`}
-              style={{
-                position: "absolute",
-                left: "42%",
-                top: "69px",
-                zIndex: 3,
-                transform: "rotate(3deg)",
-              } as React.CSSProperties}
-              onMouseEnter={() => setHoveredBadge(1)}
-              onMouseLeave={() => setHoveredBadge(null)}
-            >
-              {hoveredBadge === 1 && (
-                <div className="badge-sparkle-wrapper">
-                  <div className="sparkle sparkle-1" />
-                  <div className="sparkle sparkle-2" />
-                  <div className="sparkle sparkle-3" />
-                  <div className="sparkle sparkle-4" />
-                  <div className="sparkle sparkle-5" />
-                  <div className="sparkle sparkle-6" />
-                  <div className="sparkle sparkle-7" />
-                  <div className="sparkle sparkle-8" />
-                  <div className="sparkle sparkle-9" />
-                  <div className="sparkle sparkle-10" />
-                  <div className="sparkle sparkle-11" />
-                  <div className="sparkle sparkle-12" />
-                  <div className="sparkle sparkle-13" />
-                  <div className="sparkle sparkle-14" />
-                  <div className="sparkle sparkle-15" />
-                  <div className="sparkle sparkle-16" />
-                  <div className="sparkle sparkle-17" />
-                  <div className="sparkle sparkle-18" />
-                  <div className="sparkle sparkle-19" />
-                  <div className="sparkle sparkle-20" />
-                  <div className="sparkle sparkle-21" />
-                  <div className="sparkle sparkle-22" />
-                  <div className="sparkle sparkle-23" />
-                  <div className="sparkle sparkle-24" />
-                  <div className="sparkle sparkle-25" />
-                  <div className="sparkle sparkle-26" />
-                  <div className="sparkle sparkle-27" />
-                  <div className="sparkle sparkle-28" />
-                  <div className="sparkle sparkle-29" />
-                  <div className="sparkle sparkle-30" />
-                  <div className="sparkle sparkle-31" />
-                  <div className="sparkle sparkle-32" />
-                  <div className="sparkle sparkle-33" />
-                  <div className="sparkle sparkle-34" />
-                  <div className="sparkle sparkle-35" />
-                  <div className="sparkle sparkle-36" />
-                  <div className="sparkle sparkle-37" />
-                  <div className="sparkle sparkle-38" />
-                  <div className="sparkle sparkle-39" />
-                  <div className="sparkle sparkle-40" />
-                </div>
-              )}
-              <svg viewBox="0 0 24 24" style={{ width: 12, height: 12, stroke: "white", fill: "none", strokeWidth: 2.5, flexShrink: 0 }}>
-                <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
-              </svg>
-              <span>48 Hr. Max Shelf Age</span>
-            </div>
-
-            {/* Pill: CHAKKI-FRESH — over "FLOUR", end of first line, steeply tilted */}
-            <div
-              className={`diff-badge ${hoveredBadge === 2 ? 'badge-sparkle-container' : ''}`}
-              style={{
-                position: "absolute",
-                right: "clamp(16px, 6%, 80px)",
-                top: "clamp(28px, 5vw, 68px)",
-                zIndex: 3,
-                transform: "rotate(-19deg)",
-              } as React.CSSProperties}
-              onMouseEnter={() => setHoveredBadge(2)}
-              onMouseLeave={() => setHoveredBadge(null)}
-            >
-              {hoveredBadge === 2 && (
-                <div className="badge-sparkle-wrapper">
-                  <div className="sparkle sparkle-1" />
-                  <div className="sparkle sparkle-2" />
-                  <div className="sparkle sparkle-3" />
-                  <div className="sparkle sparkle-4" />
-                  <div className="sparkle sparkle-5" />
-                  <div className="sparkle sparkle-6" />
-                  <div className="sparkle sparkle-7" />
-                  <div className="sparkle sparkle-8" />
-                  <div className="sparkle sparkle-9" />
-                  <div className="sparkle sparkle-10" />
-                  <div className="sparkle sparkle-11" />
-                  <div className="sparkle sparkle-12" />
-                  <div className="sparkle sparkle-13" />
-                  <div className="sparkle sparkle-14" />
-                  <div className="sparkle sparkle-15" />
-                  <div className="sparkle sparkle-16" />
-                  <div className="sparkle sparkle-17" />
-                  <div className="sparkle sparkle-18" />
-                  <div className="sparkle sparkle-19" />
-                  <div className="sparkle sparkle-20" />
-                  <div className="sparkle sparkle-21" />
-                  <div className="sparkle sparkle-22" />
-                  <div className="sparkle sparkle-23" />
-                  <div className="sparkle sparkle-24" />
-                  <div className="sparkle sparkle-25" />
-                  <div className="sparkle sparkle-26" />
-                  <div className="sparkle sparkle-27" />
-                  <div className="sparkle sparkle-28" />
-                  <div className="sparkle sparkle-29" />
-                  <div className="sparkle sparkle-30" />
-                  <div className="sparkle sparkle-31" />
-                  <div className="sparkle sparkle-32" />
-                  <div className="sparkle sparkle-33" />
-                  <div className="sparkle sparkle-34" />
-                  <div className="sparkle sparkle-35" />
-                  <div className="sparkle sparkle-36" />
-                  <div className="sparkle sparkle-37" />
-                  <div className="sparkle sparkle-38" />
-                  <div className="sparkle sparkle-39" />
-                  <div className="sparkle sparkle-40" />
-                </div>
-              )}
-              <svg viewBox="0 0 24 24" style={{ width: 12, height: 12, stroke: "white", fill: "none", strokeWidth: 2.5, flexShrink: 0 }}>
-                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10" /><path d="M20 2v5h-5" /><path d="M20 7C18.5 4 15.5 2 12 2" />
-              </svg>
-              <span>Chakki-Fresh</span>
-            </div>
-
-            {/* Subheading */}
-            <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: "13px", lineHeight: "20px", letterSpacing: "1.2px", color: "rgba(255,255,255,0.75)", textTransform: "uppercase", textAlign: "center", marginTop: "16px", position: "relative", zIndex: 1 }}>
-              Most flours on supermarket shelves are machine-processed at high heat<br />
-              destroying the very nutrients you're paying for. Here's how Liimra compares.
-            </p>
           </div>
 
-          {/* Divider */}
-          <div style={{ height: "1px", background: "rgba(0,0,0,0.12)", marginBottom: "33px" }} />
+          <div className="diff-feature">
+            <span className="diff-feature-num">02</span>
+            <div className="diff-feature-icon">&#128170;</div>
+            <div className="diff-feature-title">3&times; More Fibre</div>
+            <p className="diff-feature-desc">Stone-ground to retain nutrients, not factory processed. Contains 3&times; the fibre of processed wheat flour.</p>
+            <div className="diff-feature-stat">
+              <span className="diff-stat-num">3&times;</span>
+              <span className="diff-stat-label">vs. processed wheat</span>
+            </div>
+          </div>
 
-          {/* Three feature columns */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "32px" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", height: "22px" }}>
-                <span style={{ fontFamily: "'Inter', sans-serif", fontWeight: 800, fontSize: "13px", lineHeight: "19px", letterSpacing: "1.5px", color: "#bac20c", textTransform: "uppercase", whiteSpace: "nowrap" }}>Low Glycaemic Index</span>
-              </div>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "19px", letterSpacing: "0.3px", color: "rgba(255,255,255,0.82)", margin: 0, maxWidth: "323px" }}>
-                Recommended by nutritionists for balanced, diabetes-friendly meal plans
-              </p>
-            </div>
-            <div style={{ position: "relative", paddingLeft: "16px" }}>
-              <div style={{ position: "absolute", left: 0, top: 0, width: "1px", height: "100%", background: "rgba(28,14,4,0.15)" }} />
-              <span style={{ fontFamily: "'Inter', sans-serif", fontWeight: 800, fontSize: "13px", lineHeight: "19px", letterSpacing: "1.5px", color: "#bac20c", textTransform: "uppercase", whiteSpace: "nowrap" }}>3× More Fibre</span>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "19px", letterSpacing: "0.3px", color: "rgba(255,255,255,0.82)", margin: "12px 0 0", maxWidth: "335px" }}>
-                Compared to processed wheat flour, our flour contains 3x more fiber. Stone-ground to retain nutrients, not factory processed.
-              </p>
-            </div>
-            <div style={{ position: "relative", paddingLeft: "16px" }}>
-              <div style={{ position: "absolute", left: 0, top: 0, width: "1px", height: "100%", background: "rgba(28,14,4,0.15)" }} />
-              <span style={{ fontFamily: "'Inter', sans-serif", fontWeight: 800, fontSize: "13px", lineHeight: "19px", letterSpacing: "1.5px", color: "#bac20c", textTransform: "uppercase", whiteSpace: "nowrap" }}>Gluten-Free &amp; Gut Friendly</span>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 600, fontSize: "12px", lineHeight: "19px", letterSpacing: "0.3px", color: "rgba(255,255,255,0.82)", margin: "12px 0 0", maxWidth: "336px" }}>
-                Crafted with care, absolutely no artificial additives or preservatives
-              </p>
+          <div className="diff-feature">
+            <span className="diff-feature-num">03</span>
+            <div className="diff-feature-icon">&#127807;</div>
+            <div className="diff-feature-title">Gluten-Free &amp; Gut Friendly</div>
+            <p className="diff-feature-desc">Crafted with care &mdash; absolutely no artificial additives or preservatives, ever.</p>
+            <div className="diff-feature-stat">
+              <span className="diff-stat-num">0</span>
+              <span className="diff-stat-label">Additives</span>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* ── New sections from design reference ── */}
+        {/* Nutrient retention comparison bar */}
+        <div className="diff-compare-banner">
+          <span className="diff-compare-label">Nutrient retention</span>
+          <div className="diff-compare-bar">
+            <div className="diff-bar-item">
+              <div className="diff-bar-track"><div className="diff-bar-fill" style={{ width: "92%" }} /></div>
+              <span className="diff-bar-name">Liimra Chakki</span>
+            </div>
+            <div className="diff-bar-item">
+              <div className="diff-bar-track"><div className="diff-bar-fill diff-bar-fill-dim" style={{ width: "28%" }} /></div>
+              <span className="diff-bar-name">Supermarket brand</span>
+            </div>
+            <div className="diff-bar-item">
+              <div className="diff-bar-track"><div className="diff-bar-fill diff-bar-fill-dim" style={{ width: "18%" }} /></div>
+              <span className="diff-bar-name">High-heat processed</span>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA strip */}
+        <div className="diff-cta-strip">
+          <a className="diff-cta-primary" href="#shop">
+            Shop Fresh Flour <span style={{ fontSize: "16px" }}>&#8594;</span>
+          </a>
+          <button className="diff-cta-secondary">Learn our process</button>
+        </div>
+
+      </section>
       <GoalSelectorSection />
       <BundleSection />
       <RecipeSection />

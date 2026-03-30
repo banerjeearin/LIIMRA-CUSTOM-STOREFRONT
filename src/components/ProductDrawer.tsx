@@ -5,6 +5,7 @@ import { useProducts } from "@/contexts/ProductContext";
 import { useCart } from "@/contexts/CartContext";
 import { useAnalytics } from "@/contexts/AnalyticsContext";
 import { sendProductInquiry } from "@/services/whatsapp";
+import ViewingNow from "@/components/ViewingNow";
 
 const OLIVE = "#3e4c1d";
 const NEON = "#aeb30a";
@@ -126,6 +127,9 @@ const ProductDrawer = memo(({ isOpen, onClose, productId, onNavigate }: ProductD
               {product.rating}
             </span>
             <span className="font-body text-xs text-[hsl(var(--liimra-ink-light))]">({product.reviews} reviews)</span>
+            <div className="ml-auto">
+              <ViewingNow dotColor={NEON} />
+            </div>
           </div>
 
           <p className="font-body text-base mb-4" style={{ color: "hsl(var(--liimra-ink-mid))" }}>
