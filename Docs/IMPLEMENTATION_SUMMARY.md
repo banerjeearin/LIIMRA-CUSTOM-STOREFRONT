@@ -124,13 +124,32 @@ All planned features have been successfully implemented. The frontend is now ful
   - Added `.env` to prevent committing secrets
   - Added `.env.local` and `.env.production`
 
+### 12. **Unified Analytics Pipeline & MCP Backend** ✅
+- **Files Created/Updated**:
+  - `src/contexts/AnalyticsContext.tsx` - Core tracking pipeline
+  - `src/hooks/useScrollTracker.ts` - 25/50/75/100 scroll thresholds
+  - `src/lib/supabase.ts` - PostgreSQL backend connection
+  - `Docs/SUPABASE_SETUP.sql` - Database schema definitions
+- **Key Features**:
+  - Automatically bridges standard Meta Ads `fbq` signals with Google Analytics `dataLayer` formats.
+  - Native `anonymous_id` generation mapped automatically to real `customer_id` upon session logins.
+  - Direct async pushes of eCommerce actions (including `AddToCart` & `RemoveFromCart`) straight into a custom Supabase PostgreSQL table.
+  - Fully automated UTM Campaign parameter extraction from browser URIs.
+
 ## 📁 New File Structure
 
 ```
 src/
 ├── contexts/
-│   ├── ProductContext.tsx    ✅ NEW - Product state management
-│   └── CartContext.tsx        ✅ NEW - Cart state management
+│   ├── ProductContext.tsx     ✅ NEW - Product state management
+│   ├── CartContext.tsx        ✅ NEW - Cart state management
+│   └── AnalyticsContext.tsx   ✅ UPDATED - Unified Meta/GA4/Supabase tracking pipeline
+│
+├── hooks/
+│   └── useScrollTracker.ts    ✅ NEW - Viewport milestone monitor
+│
+├── lib/
+│   └── supabase.ts            ✅ NEW - Postgres cloud db init
 │
 ├── services/
 │   ├── api/
