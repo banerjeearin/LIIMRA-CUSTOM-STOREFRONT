@@ -60,3 +60,14 @@ Since the React app now strictly controls your main domain, your customers inevi
 
 > [!NOTE]
 > DNS propagation across global Wi-Fi towers can take anywhere from 1 hour to 24 hours. Please do not panic if your site is temporarily unreachable right after changing GoDaddy settings!
+
+## Phase 4: Performance Caching (Lighthouse 100/100)
+
+DigitalOcean naturally enforces a strictly short 10-second `Cache TTL` on all static assets out of the box, which Lighthouse explicitly penalizes you for in its speed scans.
+
+To manually defeat this platform limitation and cache your files for a full year:
+1. In the DigitalOcean App Dashboard, go to your **Settings** > **App Spec**.
+2. Click **Download App Spec** (this will give you a `.yaml` file).
+3. Open the file in a code editor and find the `static_sites` block.
+4. Manually inject a `catchall_document` routing rule for `Cache-Control: public, max-age=31536000, immutable`.
+5. Upload the modified `.yaml` file back into the App Spec window to overwrite DigitalOcean's infrastructure configuration!
