@@ -312,11 +312,10 @@ const Index = () => {
                     width: `${cardWidth}px`,
                     height: "auto",
                     objectFit: "contain",
-                    filter: isHovered
-                      ? "drop-shadow(0 20px 36px rgba(0,0,0,0.35))"
-                      : "drop-shadow(0 16px 32px rgba(0,0,0,0.28))",
+                    mixBlendMode: "multiply",
                     display: "block",
-                    transition: "filter 0.45s ease",
+                    transition: "transform 0.45s ease",
+                    transform: isHovered ? "scale(1.02)" : "scale(1)",
                   }}
                 />
               </div>
