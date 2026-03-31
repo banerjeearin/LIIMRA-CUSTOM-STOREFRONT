@@ -252,9 +252,9 @@ When ready to connect to Shopify:
 ```env
 VITE_SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
 VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_token_here
-VITE_WHATSAPP_NUMBER=919876543210
-VITE_CONTACT_EMAIL=hello@liimra.com
-VITE_FREE_SHIPPING_THRESHOLD=299
+VITE_WHATSAPP_NUMBER=919321731372
+VITE_CONTACT_EMAIL=liimraenetrprises71@gmail.com
+VITE_FREE_SHIPPING_THRESHOLD=200
 VITE_STANDARD_SHIPPING_COST=40
 ```
 
@@ -271,8 +271,8 @@ All environment variables are optional. The app works perfectly without them usi
 | `VITE_SHOPIFY_STORE_DOMAIN` | - | Your Shopify store domain |
 | `VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN` | - | Storefront API access token |
 | `VITE_WHATSAPP_NUMBER` | `919321731372` | WhatsApp contact number |
-| `VITE_CONTACT_EMAIL` | `hello@liimra.com` | Support email |
-| `VITE_FREE_SHIPPING_THRESHOLD` | `299` | Free shipping threshold (₹) |
+| `VITE_CONTACT_EMAIL` | `liimraenetrprises71@gmail.com` | Support email |
+| `VITE_FREE_SHIPPING_THRESHOLD` | `200` | Free shipping threshold (₹) |
 | `VITE_STANDARD_SHIPPING_COST` | `40` | Standard shipping cost (₹) |
 
 ## 🎉 Benefits Delivered
