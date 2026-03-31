@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useCallback, ReactNode, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid"; // For CAPI deduplication event_id
+import { supabase } from "@/lib/supabase";
 
 interface TrackEventParams {
   eventName: string;
@@ -136,6 +137,26 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
       } else {
         (window as any).fbq("trackCustom", mapping.meta, enrichedPayload, { eventID: eventId });
       }
+    }
+
+    // 3. Supabase Database Push (Native API Route equivalent)
+    if (supabase) {
+      // Intentionally not awaiting so it doesn't block the UI thread
+      supabase.from('analytics_events').insert([{
+        anonymous_id: anonymousId,
+        event_category: mapping.category,
+        event_name: eventName,
+        page_url: window.location.href,
+        referrer_url: document.referrer,
+        utm_source: payload?.utm_source || null,
+        utm_medium: payload?.utm_medium || null,
+        utm_campaign: payload?.utm_campaign || null,
+        utm_term: payload?.utm_term || null,
+        utm_content: payload?.utm_content || null,
+        payload: enrichedPayload
+      }]).catch((err) => {
+        if (import.meta.env.DEV) console.error("Supabase Tracking Error:", err);
+      });
     }
 
     // Console logging for dev verification
