@@ -278,7 +278,7 @@ const Footer = memo(() => {
           <span>✓ WhatsApp support</span>
         </div>
         <div className="text-center">
-          <p className="font-body text-sm text-white/60">Questions? WhatsApp: +91-98765-43210</p>
+          <p className="font-body text-sm text-white/60">Questions? WhatsApp: +91-93217-31372</p>
         </div>
       </div>
 

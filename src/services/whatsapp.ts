@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "919876543210";
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "919321731372";
 
 export const sendWhatsAppMessage = (message: string) => {
   const encodedMessage = encodeURIComponent(message);
