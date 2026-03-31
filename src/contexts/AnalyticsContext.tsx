@@ -141,22 +141,27 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
 
     // 3. Supabase Database Push (Native API Route equivalent)
     if (supabase) {
-      // Intentionally not awaiting so it doesn't block the UI thread
-      supabase.from('analytics_events').insert([{
-        anonymous_id: anonymousId,
-        event_category: mapping.category,
-        event_name: eventName,
-        page_url: window.location.href,
-        referrer_url: document.referrer,
-        utm_source: payload?.utm_source || null,
-        utm_medium: payload?.utm_medium || null,
-        utm_campaign: payload?.utm_campaign || null,
-        utm_term: payload?.utm_term || null,
-        utm_content: payload?.utm_content || null,
-        payload: enrichedPayload
-      }]).catch((err) => {
-        if (import.meta.env.DEV) console.error("Supabase Tracking Error:", err);
-      });
+      // Intentionally wrapped in async IIFE so it doesn't block the UI thread
+      (async () => {
+        try {
+          const { error } = await supabase.from('analytics_events').insert([{
+            anonymous_id: anonymousId,
+            event_category: mapping.category,
+            event_name: eventName,
+            page_url: window.location.href,
+            referrer_url: document.referrer,
+            utm_source: payload?.utm_source || null,
+            utm_medium: payload?.utm_medium || null,
+            utm_campaign: payload?.utm_campaign || null,
+            utm_term: payload?.utm_term || null,
+            utm_content: payload?.utm_content || null,
+            payload: enrichedPayload
+          }]);
+          if (error && import.meta.env.DEV) console.error("Supabase API Error:", error);
+        } catch (err) {
+          if (import.meta.env.DEV) console.error("Supabase Tracking Error:", err);
+        }
+      })();
     }
 
     // Console logging for dev verification
