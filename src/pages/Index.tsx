@@ -1,21 +1,22 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback, Suspense, lazy } from "react";
 import Header from "@/components/Header";
 import FloatingInfoButton from "@/components/FloatingInfoButton";
 import ScrollProgress from "@/components/ScrollProgress";
 import ProductDrawer from "@/components/ProductDrawer";
-import GoalSelectorSection from "@/components/GoalSelectorSection";
-import BundleSection from "@/components/BundleSection";
-import RecipeSection from "@/components/RecipeSection";
-import ExpertVoicesSection from "@/components/ExpertVoicesSection";
-import ReviewsSection from "@/components/ReviewsSection";
-import WhyLiimraSection from "@/components/WhyLiimraSection";
-import FAQSection from "@/components/FAQSection";
-import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import ViewingNow from "@/components/ViewingNow";
 import { SEO } from "@/components/SEO/SEO";
 import { OrganizationSchema, FAQSchema } from "@/components/SEO/StructuredData";
 import { useImpressionTracker } from "@/hooks/useImpressionTracker";
+
+const GoalSelectorSection = lazy(() => import("@/components/GoalSelectorSection"));
+const BundleSection = lazy(() => import("@/components/BundleSection"));
+const RecipeSection = lazy(() => import("@/components/RecipeSection"));
+const ExpertVoicesSection = lazy(() => import("@/components/ExpertVoicesSection"));
+const ReviewsSection = lazy(() => import("@/components/ReviewsSection"));
+const WhyLiimraSection = lazy(() => import("@/components/WhyLiimraSection"));
+const FAQSection = lazy(() => import("@/components/FAQSection"));
+const Footer = lazy(() => import("@/components/Footer"));
 
 const deckCards = [
   { id: "bajra",  name: "Bajra Flour",  image: "/products/bajra-250gm.png" },
@@ -330,7 +331,6 @@ const Index = () => {
         style={{ background: "#3e4c1d", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", padding: "80px 40px 100px", position: "relative" }}
       >
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap');
 
           .diff-bg-circle {
             position: absolute;
@@ -737,14 +737,16 @@ const Index = () => {
         </div>
 
       </section>
-      <GoalSelectorSection />
-      <BundleSection />
-      <RecipeSection />
-      <ExpertVoicesSection />
-      <ReviewsSection />
-      <WhyLiimraSection />
-      <FAQSection />
-      <Footer />
+      <Suspense fallback={<div style={{ minHeight: "100vh" }}></div>}>
+        <GoalSelectorSection />
+        <BundleSection />
+        <RecipeSection />
+        <ExpertVoicesSection />
+        <ReviewsSection />
+        <WhyLiimraSection />
+        <FAQSection />
+        <Footer />
+      </Suspense>
 
       <FloatingInfoButton />
       
