@@ -149,7 +149,7 @@ const Index = () => {
   );
 
   return (
-    <div className="relative">
+    <main className="relative">
       <SEO />
       <OrganizationSchema />
       <FAQSchema />
@@ -202,7 +202,7 @@ const Index = () => {
               ))}
             </div>
             
-            <p className="font-body text-[10px] sm:text-xs tracking-[0.35em] uppercase text-[hsl(var(--liimra-ink-light))] mb-6 transition-opacity duration-500" style={{ opacity: 0.7 }}>
+            <p className="font-body text-[10px] sm:text-xs tracking-[0.35em] uppercase text-[hsl(var(--liimra-ink-light))] mb-6 transition-opacity duration-500">
               {heroMessages[heroIndex].persona}
             </p>
             
@@ -758,7 +758,7 @@ const Index = () => {
       />
       
       <CartDrawer />
-    </div>
+    </main>
   );
 };
 

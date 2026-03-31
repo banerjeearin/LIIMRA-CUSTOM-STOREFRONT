@@ -278,7 +278,7 @@ const Footer = memo(() => {
           <span>✓ WhatsApp support</span>
         </div>
         <div className="text-center">
-          <p className="font-body text-sm text-white/60">Questions? WhatsApp: +91-93217-31372</p>
+          <p className="font-body text-sm text-white/80">Questions? WhatsApp: +91-93217-31372</p>
         </div>
       </div>
 
@@ -290,7 +290,7 @@ const Footer = memo(() => {
             <div className="font-display font-black text-2xl mb-2" style={{ color: NEON }}>
               Liimra
             </div>
-            <p className="font-body text-sm leading-relaxed text-white/60 mb-4">
+            <p className="font-body text-sm leading-relaxed text-white/80 mb-4">
               Family business. Fresh flour. Pure care.
             </p>
             <div className="flex items-center gap-3">
@@ -324,7 +324,7 @@ const Footer = memo(() => {
 
           {/* Shop links */}
           <div>
-            <h4 className="font-body text-xs font-bold tracking-[0.15em] uppercase mb-4 text-white/50">
+            <h4 className="font-body text-xs font-bold tracking-[0.15em] uppercase mb-4 text-white/70">
               Shop
             </h4>
             <ul className="space-y-2.5">
@@ -343,7 +343,7 @@ const Footer = memo(() => {
 
           {/* Learn links */}
           <div>
-            <h4 className="font-body text-xs font-bold tracking-[0.15em] uppercase mb-4 text-white/50">
+            <h4 className="font-body text-xs font-bold tracking-[0.15em] uppercase mb-4 text-white/70">
               Learn
             </h4>
             <ul className="space-y-2.5">
@@ -372,7 +372,7 @@ const Footer = memo(() => {
 
           {/* Trust badges */}
           <div>
-            <h4 className="font-body text-xs font-bold tracking-[0.15em] uppercase mb-4 text-white/50">
+            <h4 className="font-body text-xs font-bold tracking-[0.15em] uppercase mb-4 text-white/70">
               Trust
             </h4>
             <ul className="space-y-2.5">
@@ -409,14 +409,14 @@ const Footer = memo(() => {
           className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left"
           style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
         >
-          <p className="font-body text-xs text-white/40">
+          <p className="font-body text-xs text-white/60">
             © {new Date().getFullYear()} Liimra Naturals. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <a href="#" className="font-body text-xs text-white/40 hover:text-white/70 transition-colors">
+            <a href="#" className="font-body text-xs text-white/60 hover:text-white/90 transition-colors">
               Privacy Policy
             </a>
-            <a href="#" className="font-body text-xs text-white/40 hover:text-white/70 transition-colors">
+            <a href="#" className="font-body text-xs text-white/60 hover:text-white/90 transition-colors">
               Terms of Service
             </a>
           </div>

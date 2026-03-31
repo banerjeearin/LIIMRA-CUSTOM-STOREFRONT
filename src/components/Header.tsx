@@ -45,7 +45,8 @@ const Header = memo(() => {
         <div className="flex items-center gap-3">
           <button
             onClick={openCart}
-            className="relative p-2 rounded-full hover:bg-[hsl(var(--liimra-sage-light)/0.5)] transition-colors"
+            aria-label="Open Cart"
+            className="relative p-3 rounded-full hover:bg-[hsl(var(--liimra-sage-light)/0.5)] transition-colors"
           >
             <ShoppingBag size={20} className="text-[hsl(var(--liimra-ink))]" />
             {cartCount > 0 && (
@@ -61,7 +62,7 @@ const Header = memo(() => {
           {/* Mobile hamburger */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
-              <button className="md:hidden p-2 rounded-full hover:bg-[hsl(var(--liimra-sage-light)/0.5)] transition-colors">
+              <button aria-label="Toggle Menu" className="md:hidden p-3 rounded-full hover:bg-[hsl(var(--liimra-sage-light)/0.5)] transition-colors">
                 <Menu size={20} className="text-[hsl(var(--liimra-ink))]" />
               </button>
             </SheetTrigger>
