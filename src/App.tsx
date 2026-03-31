@@ -8,13 +8,20 @@ import { CartProvider } from "@/contexts/CartContext";
 import { AnalyticsProvider } from "@/contexts/AnalyticsContext";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { useScrollTracker } from "./hooks/useScrollTracker";
 
 const queryClient = new QueryClient();
+
+const GlobalAnalytics = () => {
+  useScrollTracker();
+  return null;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <AnalyticsProvider>
+            <GlobalAnalytics />
             <ProductProvider>
               <CartProvider>
                 <TooltipProvider>

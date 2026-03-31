@@ -96,7 +96,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeItem = (itemId: string) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== itemId));
+    setCart((prevCart) => {
+      const itemToRemove = prevCart.find((item) => item.id === itemId);
+      if (itemToRemove) {
+        trackEcommerce("RemoveFromCart", {
+          content_ids: [itemToRemove.productId],
+          content_type: 'product',
+          value: itemToRemove.price * itemToRemove.quantity,
+          currency: "INR"
+        });
+      }
+      return prevCart.filter((item) => item.id !== itemId);
+    });
   };
 
   const clearCart = () => {

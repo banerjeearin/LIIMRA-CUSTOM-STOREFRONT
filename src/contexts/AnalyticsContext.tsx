@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useCallback, ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useCallback, ReactNode, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid"; // For CAPI deduplication event_id
 
@@ -6,18 +6,63 @@ interface TrackEventParams {
   eventName: string;
   payload?: any;
   eventId?: string;
+  category?: string;
 }
 
 interface AnalyticsContextType {
+  anonymousId: string;
   trackEvent: (params: TrackEventParams) => void;
   trackEyeball: (elementName: string, payload?: any) => void;
-  trackEcommerce: (action: "ViewContent" | "AddToCart" | "InitiateCheckout" | "Purchase", payload?: any) => void;
+  trackEcommerce: (action: "ViewContent" | "AddToCart" | "RemoveFromCart" | "InitiateCheckout" | "Purchase", payload?: any) => void;
+  trackScroll: (depth: 25 | 50 | 75 | 100) => void;
+  trackEngagement: (action: "Search" | "ShareProduct", payload?: any) => void;
+  trackIdentity: (action: "CustomerLogin" | "CustomerRegister", customerId: string, traits?: any) => void;
+  trackNavigation: (action: "CollectionView", payload?: any) => void;
 }
 
 const AnalyticsContext = createContext<AnalyticsContextType | undefined>(undefined);
 
+const ANONYMOUS_ID_KEY = "liimra_anonymous_id";
+
+const getOrCreateAnonymousId = (): string => {
+  if (typeof window === "undefined") return uuidv4();
+  let id = localStorage.getItem(ANONYMOUS_ID_KEY);
+  if (!id) {
+    id = uuidv4();
+    localStorage.setItem(ANONYMOUS_ID_KEY, id);
+  }
+  return id;
+};
+
+const parseUtmParams = (searchString: string) => {
+  if (typeof window === "undefined") return {};
+  const params = new URLSearchParams(searchString);
+  return {
+    utm_source: params.get("utm_source") || undefined,
+    utm_medium: params.get("utm_medium") || undefined,
+    utm_campaign: params.get("utm_campaign") || undefined,
+    utm_term: params.get("utm_term") || undefined,
+    utm_content: params.get("utm_content") || undefined,
+  };
+};
+
+const eventMappings: Record<string, { meta: string, ga4: string, category: string }> = {
+  "PageView": { meta: "PageView", ga4: "page_view", category: "NAVIGATION" },
+  "CollectionView": { meta: "ViewCategory", ga4: "view_item_list", category: "NAVIGATION" },
+  "ViewContent": { meta: "ViewContent", ga4: "view_item", category: "ENGAGEMENT" },
+  "AddToCart": { meta: "AddToCart", ga4: "add_to_cart", category: "CART" },
+  "RemoveFromCart": { meta: "RemoveFromCart", ga4: "remove_from_cart", category: "CART" },
+  "InitiateCheckout": { meta: "InitiateCheckout", ga4: "begin_checkout", category: "CONVERSION" },
+  "Purchase": { meta: "Purchase", ga4: "purchase", category: "CONVERSION" },
+  "Search": { meta: "Search", ga4: "search", category: "ENGAGEMENT" },
+  "ShareProduct": { meta: "ShareProduct", ga4: "share", category: "ENGAGEMENT" },
+  "CustomerLogin": { meta: "CustomerLogin", ga4: "login", category: "IDENTITY" },
+  "CustomerRegister": { meta: "CompleteRegistration", ga4: "sign_up", category: "IDENTITY" },
+};
+
 export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
+  const [anonymousId] = useState<string>(() => getOrCreateAnonymousId());
 
   useEffect(() => {
     const gtmId = import.meta.env.VITE_GTM_ID;
@@ -63,12 +108,20 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // Core tracking function mapping to DataLayer (GTM) and Meta Pixel
-  const trackEvent = useCallback(({ eventName, payload, eventId }: TrackEventParams) => {
+  const trackEvent = useCallback(({ eventName, payload, eventId, category }: TrackEventParams) => {
+    const mapping = eventMappings[eventName] || { meta: eventName, ga4: eventName, category: category || "CUSTOM" };
+    const enrichedPayload = {
+      ...payload,
+      anonymous_id: anonymousId,
+      event_category: mapping.category,
+    };
+
     // 1. DataLayer (Google Tag Manager)
     if (typeof window !== "undefined" && (window as any).dataLayer) {
       (window as any).dataLayer.push({
-        event: eventName,
-        ...payload,
+        event: mapping.ga4, // Use GA4 standard name for tag manager event trigger
+        gtm_event_name: eventName, // The unified name
+        ...enrichedPayload,
         event_id: eventId,
       });
     }
@@ -76,27 +129,34 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     // 2. Meta Pixel (fbq)
     if (typeof window !== "undefined" && (window as any).fbq) {
       // Standard events directly map if they match FB standard event names
-      const standardEvents = ["ViewContent", "AddToCart", "InitiateCheckout", "Purchase", "PageView"];
+      const standardEvents = ["PageView", "ViewContent", "AddToCart", "InitiateCheckout", "Purchase", "Search", "CompleteRegistration", "Contact"];
       
-      if (standardEvents.includes(eventName)) {
-        (window as any).fbq("track", eventName, payload, { eventID: eventId });
+      if (standardEvents.includes(mapping.meta)) {
+        (window as any).fbq("track", mapping.meta, enrichedPayload, { eventID: eventId });
       } else {
-        (window as any).fbq("trackCustom", eventName, payload, { eventID: eventId });
+        (window as any).fbq("trackCustom", mapping.meta, enrichedPayload, { eventID: eventId });
       }
     }
 
     // Console logging for dev verification
     if (import.meta.env.DEV) {
-      console.log(`[Analytics Track] ${eventName}`, payload, `(event_id: ${eventId})`);
+      console.log(`[Analytics Track] [${mapping.category}] ${eventName} (GA4: ${mapping.ga4}, Meta: ${mapping.meta})`, enrichedPayload);
     }
-  }, []);
+  }, [anonymousId]);
 
   // Track page views on route change
   useEffect(() => {
     const pageViewEventId = uuidv4();
+    const utms = parseUtmParams(location.search);
     trackEvent({
       eventName: "PageView",
-      payload: { path: location.pathname, search: location.search },
+      payload: { 
+        page_url: window.location.href,
+        path: location.pathname, 
+        search: location.search,
+        referrer_url: document.referrer,
+        ...utms
+      },
       eventId: pageViewEventId,
     });
   }, [location, trackEvent]);
@@ -105,13 +165,14 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
   const trackEyeball = useCallback((elementName: string, payload?: any) => {
     trackEvent({
       eventName: "Eyeball_Impression",
+      category: "ENGAGEMENT",
       payload: { element_name: elementName, ...payload },
       eventId: uuidv4(),
     });
   }, [trackEvent]);
 
   // Convenience method for standard e-commerce tracking
-  const trackEcommerce = useCallback((action: "ViewContent" | "AddToCart" | "InitiateCheckout" | "Purchase", payload?: any) => {
+  const trackEcommerce = useCallback((action: "ViewContent" | "AddToCart" | "RemoveFromCart" | "InitiateCheckout" | "Purchase", payload?: any) => {
     trackEvent({
       eventName: action,
       payload: payload,
@@ -119,8 +180,48 @@ export const AnalyticsProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [trackEvent]);
 
+  // Track Scroll
+  const trackScroll = useCallback((depth: 25 | 50 | 75 | 100) => {
+    trackEvent({
+      eventName: `ScrollDepth${depth}`,
+      category: "ENGAGEMENT",
+      payload: { scroll_depth: depth },
+      eventId: uuidv4(),
+    });
+  }, [trackEvent]);
+
+  // Track Generic Engagement
+  const trackEngagement = useCallback((action: "Search" | "ShareProduct", payload?: any) => {
+    trackEvent({
+      eventName: action,
+      payload: payload,
+      eventId: uuidv4(),
+    });
+  }, [trackEvent]);
+
+  // Track Identity
+  const trackIdentity = useCallback((action: "CustomerLogin" | "CustomerRegister", customerId: string, traits?: any) => {
+    trackEvent({
+      eventName: action,
+      payload: { customer_id: customerId, ...traits },
+      eventId: uuidv4(),
+    });
+  }, [trackEvent]);
+
+  // Track Navigation
+  const trackNavigation = useCallback((action: "CollectionView", payload?: any) => {
+    trackEvent({
+      eventName: action,
+      payload: payload,
+      eventId: uuidv4(),
+    });
+  }, [trackEvent]);
+
   return (
-    <AnalyticsContext.Provider value={{ trackEvent, trackEyeball, trackEcommerce }}>
+    <AnalyticsContext.Provider value={{ 
+      anonymousId, trackEvent, trackEyeball, trackEcommerce, 
+      trackScroll, trackEngagement, trackIdentity, trackNavigation 
+    }}>
       {children}
     </AnalyticsContext.Provider>
   );
