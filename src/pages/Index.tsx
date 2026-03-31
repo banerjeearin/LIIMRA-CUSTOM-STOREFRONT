@@ -19,12 +19,12 @@ const FAQSection = lazy(() => import("@/components/FAQSection"));
 const Footer = lazy(() => import("@/components/Footer"));
 
 const deckCards = [
-  { id: "bajra",  name: "Bajra Flour",  image: "/products/bajra-250gm.png" },
-  { id: "jowar",  name: "Jowar Flour",  image: "/products/jowar-250gm.png" },
-  { id: "kangni", name: "Kangni Flour", image: "/products/kangni-250gm.png" },
-  { id: "kutki",  name: "Kutki Flour",  image: "/products/kutki-250gm.png" },
-  { id: "ragi",   name: "Ragi Flour",   image: "/products/ragi-250gm.png" },
-  { id: "rice",   name: "Rice Flour",   image: "/products/rice-500gm.png" },
+  { id: "bajra",  name: "Bajra Flour",  image: "/products/Bajra%20Front%20250%20gm.webp" },
+  { id: "jowar",  name: "Jowar Flour",  image: "/products/Jowar%20Front%20250gm.webp" },
+  { id: "kangni", name: "Kangni Flour", image: "/products/Kangni%20Front%20250%20gm.webp" },
+  { id: "kutki",  name: "Kutki Flour",  image: "/products/Kutki%20Front%20250%20gm.webp" },
+  { id: "ragi",   name: "Ragi Flour",   image: "/products/Ragi%20Front%20250%20gm.webp" },
+  { id: "rice",   name: "Rice Flour",   image: "/products/Rice%20Flour%20Front%20500%20gm.webp" },
 ];
 
 // Base config for desktop (1200px+)
