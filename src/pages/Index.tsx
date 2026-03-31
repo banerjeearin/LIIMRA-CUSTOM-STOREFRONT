@@ -251,10 +251,10 @@ const Index = () => {
             {/* Stats row â€” matrix layout */}
             <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-10 mt-8">
               {[
-                { value: "4.9â˜…", label: "Rating" },
+                { value: "4.9★", label: "Rating" },
                 { value: "1,400+", label: "Families" },
                 { value: "48hr", label: "Dispatch" },
-                { value: "â‚¹0", label: "COD Fee" },
+                { value: "₹0", label: "COD Fee" },
               ].map((m) => (
                 <div key={m.label} className="text-center">
                   <div className="font-display text-xl sm:text-3xl font-black text-[hsl(var(--liimra-forest))]">{m.value}</div>
@@ -266,7 +266,7 @@ const Index = () => {
             {/* Primary CTA */}
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-7">
               <a href="#shop" className="font-body text-sm tracking-[0.12em] uppercase px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[hsl(var(--liimra-forest))] text-[hsl(var(--liimra-cream))] hover:scale-105 transition-transform duration-300 shadow-xl font-semibold" style={{ willChange: "transform" }}>
-                Shop Now â€” From â‚¹99
+                Shop Now — From ₹99
               </a>
               <a href="#bundles" className="font-body text-sm tracking-[0.12em] uppercase px-8 sm:px-10 py-4 sm:py-5 rounded-full border-2 border-[hsl(var(--liimra-forest))] text-[hsl(var(--liimra-forest))] hover:bg-[hsl(var(--liimra-forest)/0.05)] transition-all duration-300 font-semibold" style={{ willChange: "background-color" }}>
                 View Bundles
