@@ -19,7 +19,7 @@ const FAQSection = lazy(() => import("@/components/FAQSection"));
 const Footer = lazy(() => import("@/components/Footer"));
 
 const deckCards = [
-  { id: "bajra",  name: "Bajra Flour",  image: "/products/bajra-250gm.webp" },
+  { id: "bajra",  name: "Bajra Flour",  image: "/products/bajra-250 gm.webp" },
   { id: "jowar",  name: "Jowar Flour",  image: "/products/jowar-250gm.webp" },
   { id: "kangni", name: "Kangni Flour", image: "/products/kangni-250gm.webp" },
   { id: "kutki",  name: "Kutki Flour",  image: "/products/kutki-250gm.webp" },

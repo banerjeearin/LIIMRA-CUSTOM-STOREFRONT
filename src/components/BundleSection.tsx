@@ -29,7 +29,7 @@ const bundles: Bundle[] = [
     items: [
       { image: "/products/ragi-250gm.png",  name: "Ragi Flour",  weight: "250g · Finger Millet", mrp: 199 },
       { image: "/products/jowar-250gm.png", name: "Jowar Flour", weight: "250g · Sorghum",        mrp: 189 },
-      { image: "/products/bajra-250gm.png", name: "Bajra Flour", weight: "250g · Pearl Millet",   mrp: 179 },
+      { image: "/products/bajra-250 gm.png", name: "Bajra Flour", weight: "250g · Pearl Millet",   mrp: 179 },
     ],
     totalMrp: 567,
     bundlePrice: 439,
@@ -44,7 +44,7 @@ const bundles: Bundle[] = [
     items: [
       { image: "/products/ragi-250gm.png",   name: "Ragi Flour",      weight: "250g · Finger Millet", mrp: 199 },
       { image: "/products/jowar-250gm.png",  name: "Jowar Flour",     weight: "250g · Sorghum",       mrp: 189 },
-      { image: "/products/bajra-250gm.png",  name: "Bajra Flour",     weight: "250g · Pearl Millet",  mrp: 179 },
+      { image: "/products/bajra-250 gm.png",  name: "Bajra Flour",     weight: "250g · Pearl Millet",  mrp: 179 },
       { image: "/products/kangni-250gm.png", name: "Kangni Flour",    weight: "250g · Foxtail Millet",mrp: 189 },
       { image: "/products/kutki-250gm.png",  name: "Kutki Flour",     weight: "250g · Little Millet", mrp: 199 },
       { image: "/products/rice-500gm.png",   name: "Rice Flour",      weight: "500g · Stone-Ground",  mrp: 129 },
