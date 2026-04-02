@@ -210,19 +210,19 @@ export const shopifyService: APIService = {
   },
 
   createCheckout: async (items: CartItem[]): Promise<{ checkoutUrl: string }> => {
-    const lineItems = items.map((item) => ({
-      variantId: item.variantId,
+    const lines = items.map((item) => ({
+      merchandiseId: item.variantId,
       quantity: item.quantity,
     }));
 
     const mutation = `
-      mutation CreateCheckout($lineItems: [CheckoutLineItemInput!]!) {
-        checkoutCreate(input: { lineItems: $lineItems }) {
-          checkout {
+      mutation CreateCart($lines: [CartLineInput!]!) {
+        cartCreate(input: { lines: $lines }) {
+          cart {
             id
-            webUrl
+            checkoutUrl
           }
-          checkoutUserErrors {
+          userErrors {
             field
             message
           }
@@ -230,16 +230,16 @@ export const shopifyService: APIService = {
       }
     `;
 
-    const data = await shopifyFetch(mutation, { lineItems });
+    const data = await shopifyFetch(mutation, { lines });
 
-    if (data.checkoutCreate.checkoutUserErrors.length > 0) {
+    if (data.cartCreate.userErrors.length > 0) {
       throw new Error(
-        `Checkout error: ${data.checkoutCreate.checkoutUserErrors.map((e: { message: string }) => e.message).join(", ")}`
+        `Checkout error: ${data.cartCreate.userErrors.map((e: { message: string }) => e.message).join(", ")}`
       );
     }
 
     return {
-      checkoutUrl: data.checkoutCreate.checkout.webUrl,
+      checkoutUrl: data.cartCreate.cart.checkoutUrl,
     };
   },
 };
