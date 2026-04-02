@@ -48,7 +48,7 @@ const grains = [
   {
     id: "bajra",
     label: "Bajra",
-    image: "/products/bajra-250 gm.png",
+    image: "/products/bajra-250gm.png",
     latinName: "Pennisetum glaucum",
     subTitle: "Pearl Millet",
     title: "Bajra — The Iron & Energy Warrior",
