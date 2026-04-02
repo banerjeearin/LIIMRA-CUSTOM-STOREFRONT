@@ -238,8 +238,12 @@ export const shopifyService: APIService = {
       );
     }
 
+    const rawCheckoutUrl = data.cartCreate.cart.checkoutUrl;
+    const checkoutUrl = new URL(rawCheckoutUrl);
+    checkoutUrl.hostname = SHOPIFY_DOMAIN;
+
     return {
-      checkoutUrl: data.cartCreate.cart.checkoutUrl,
+      checkoutUrl: checkoutUrl.toString(),
     };
   },
 };
