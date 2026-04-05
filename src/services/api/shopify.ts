@@ -240,7 +240,7 @@ export const shopifyService: APIService = {
 
     const rawCheckoutUrl = data.cartCreate.cart.checkoutUrl;
     const checkoutUrl = new URL(rawCheckoutUrl);
-    checkoutUrl.hostname = SHOPIFY_DOMAIN;
+    checkoutUrl.hostname = "checkout.liimra.in";
 
     return {
       checkoutUrl: checkoutUrl.toString(),
