@@ -76,28 +76,7 @@ const ProductCard = memo(({ product }: { product: Product }) => {
       onMouseLeave={() => setHovered(false)}
     >
       <ProductSchema product={product} />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden"
-        style={{ zIndex: 0 }}
-      >
-        <span
-          style={{
-            fontFamily: "'Arial Black', 'Arial', sans-serif",
-            fontWeight: 900,
-            fontSize: "clamp(7rem, 18vw, 14rem)",
-            lineHeight: 1,
-            letterSpacing: "-0.04em",
-            color: OLIVE,
-            opacity: 0.045,
-            whiteSpace: "nowrap",
-            userSelect: "none",
-            paddingLeft: "2%",
-          }}
-        >
-          {backdropWord}
-        </span>
-      </div>
+
 
       <div className="relative flex flex-col sm:flex-row items-stretch" style={{ zIndex: 1, minHeight: "300px" }}>
         <div

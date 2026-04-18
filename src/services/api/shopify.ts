@@ -52,6 +52,10 @@ const mapShopifyProductToProduct = (shopifyProduct: ShopifyProduct): Product => 
   const variantNodes = shopifyProduct.variants?.edges?.map((e) => e.node) || [];
   const imageNodes = shopifyProduct.images?.edges?.map((e) => e.node) || [];
 
+  if (shopifyProduct.title.toLowerCase().includes("ragi")) {
+    console.log("RAGI DEBUG VARIANTS:", shopifyProduct.title, JSON.stringify(variantNodes, null, 2));
+  }
+
   const sizes: ProductSize[] = variantNodes.map((variant) => {
     const price = parseFloat(variant.price.amount);
     const mrp = variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount) : price;
