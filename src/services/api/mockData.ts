@@ -15,6 +15,11 @@ export const mockDataService: APIService = {
     return products.find((p) => p.id === id) || null;
   },
 
+  getCollections: async () => {
+    await delay(300);
+    return [];
+  },
+
   createCheckout: async (items: CartItem[]): Promise<{ checkoutUrl: string }> => {
     await delay(500);
     console.log("Mock checkout created with items:", items);

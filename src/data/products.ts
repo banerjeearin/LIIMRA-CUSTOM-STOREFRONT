@@ -41,10 +41,27 @@ export interface Product {
   imageBg: string;
   tagline: string;
   detailedDescription: string;
+  descriptionHtml?: string;
   scientificHighlight: string;
   nutritionalFacts: NutrientHighlight[];
   uses: string[];
   badge: string;
+  
+  // Bundle Specific Fields
+  isBundle?: boolean;
+  bundleTag?: string;
+  bundleItems?: {
+    id: string;
+    name: string;
+    image: string;
+    mrp: number;
+    price: number;
+    weight: string;
+    variantId: string;
+  }[];
+  ribbon?: string;
+  subtitle?: string;
+  savePct?: number;
 }
 
 export const products: Product[] = [

@@ -44,8 +44,31 @@ export interface ShopifyProduct {
   tags: string[];
 }
 
+export interface ShopifyCollection {
+  id: string;
+  title: string;
+  handle: string;
+  descriptionHtml: string;
+  products?: {
+    edges: Array<{ node: ShopifyProduct }>;
+  };
+}
+
+export interface Collection {
+  id: string;
+  title: string;
+  handle: string;
+  descriptionHtml: string;
+  products: Product[];
+  ribbon: string;
+  subtitle: string;
+  savePct: number;
+  tag: string;
+}
+
 export interface APIService {
   getProducts: () => Promise<Product[]>;
   getProduct: (id: string) => Promise<Product | null>;
+  getCollections: () => Promise<Collection[]>;
   createCheckout: (items: CartItem[]) => Promise<{ checkoutUrl: string }>;
 }

@@ -2,9 +2,11 @@ import { createContext, useContext, ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { productAPI } from "@/services/api/productService";
 import type { Product } from "@/data/products";
+import type { Collection } from "@/services/api/types";
 
 interface ProductContextType {
   products: Product[];
+  collections: Collection[];
   isLoading: boolean;
   error: Error | null;
   getProduct: (id: string) => Product | undefined;
@@ -24,8 +26,8 @@ const goalProducts: Record<string, string[]> = {
 export const ProductProvider = ({ children }: { children: ReactNode }) => {
   const {
     data: products = [],
-    isLoading,
-    error,
+    isLoading: isLoadingProducts,
+    error: productsError,
   } = useQuery<Product[], Error>({
     queryKey: ["products"],
     queryFn: productAPI.getProducts,
@@ -33,6 +35,21 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
     gcTime: 10 * 60 * 1000,
     retry: 1,
   });
+
+  const {
+    data: collections = [],
+    isLoading: isLoadingCollections,
+    error: collectionsError,
+  } = useQuery<Collection[], Error>({
+    queryKey: ["collections"],
+    queryFn: productAPI.getCollections,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    retry: 1,
+  });
+
+  const isLoading = isLoadingProducts || isLoadingCollections;
+  const error = productsError || collectionsError;
 
   const getProduct = (id: string) => {
     return products.find((p) => p.id === id);
@@ -60,6 +77,7 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
     <ProductContext.Provider
       value={{
         products,
+        collections,
         isLoading,
         error,
         getProduct,

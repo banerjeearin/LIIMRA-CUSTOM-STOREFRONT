@@ -3,58 +3,11 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import TypewriterTitle from "@/components/ui/TypewriterTitle";
 import { useCart } from "@/contexts/CartContext";
 import { useProducts } from "@/contexts/ProductContext";
+import type { Product } from "@/data/products";
 
 const OLIVE_DARK = "#3e4c1d";
 const NEON = "#aeb30a";
 const NEON_DIM = "rgba(174,179,10,0.15)";
-
-type Bundle = {
-  id: string;
-  ribbon: string;
-  title: string;
-  subtitle: string;
-  items: { image: string; name: string; weight: string; mrp: number }[];
-  totalMrp: number;
-  bundlePrice: number;
-  savePct: number;
-  tag: string;
-};
-
-const bundles: Bundle[] = [
-  {
-    id: "trio",
-    ribbon: "✦ Most Popular",
-    title: "Sugar Control Trio",
-    subtitle: "The 3 best low-GI flours for blood sugar control. Real results: HbA1c from 8.2 → 6.9 in 3 months.",
-    items: [
-      { image: "/products/ragi-250gm.webp",  name: "Ragi Flour",  weight: "250g · Finger Millet", mrp: 199 },
-      { image: "/products/jowar-250gm.webp", name: "Jowar Flour", weight: "250g · Sorghum",        mrp: 189 },
-      { image: "/products/bajra-250gm.webp", name: "Bajra Flour", weight: "250g · Pearl Millet",   mrp: 179 },
-    ],
-    totalMrp: 567,
-    bundlePrice: 439,
-    savePct: 22,
-    tag: "Best for blood sugar",
-  },
-  {
-    id: "complete",
-    ribbon: "✦ Best Value",
-    title: "Complete Millet Collection",
-    subtitle: "All 6 flours. Complete nutrition. One simple choice for your family's health.",
-    items: [
-      { image: "/products/ragi-250gm.webp",   name: "Ragi Flour",      weight: "250g · Finger Millet", mrp: 199 },
-      { image: "/products/jowar-250gm.webp",  name: "Jowar Flour",     weight: "250g · Sorghum",       mrp: 189 },
-      { image: "/products/bajra-250gm.webp",  name: "Bajra Flour",     weight: "250g · Pearl Millet",  mrp: 179 },
-      { image: "/products/kangni-250gm.webp", name: "Kangni Flour",    weight: "250g · Foxtail Millet",mrp: 189 },
-      { image: "/products/kutki-250gm.webp",  name: "Kutki Flour",     weight: "250g · Little Millet", mrp: 199 },
-      { image: "/products/rice-500gm.webp",   name: "Rice Flour",      weight: "500g · Stone-Ground",  mrp: 129 },
-    ],
-    totalMrp: 1084,
-    bundlePrice: 799,
-    savePct: 26,
-    tag: "Complete nutrition",
-  },
-];
 
 const volumeTiers = [
   { qty: "1×",  label: "Single order" },
@@ -62,124 +15,219 @@ const volumeTiers = [
   { qty: "3×",  label: "10% off" },
 ];
 
-const BundleCard = memo(({ bundle, activeVol, setActiveVol }: { bundle: Bundle; activeVol: number; setActiveVol: (i: number) => void }) => {
+const BundleCard = memo(({ bundleProduct, allProducts, activeVol, setActiveVol }: { bundleProduct: Product; allProducts: Product[]; activeVol: number; setActiveVol: (i: number) => void }) => {
   const { addItem, openCart } = useCart();
-  const { getProduct } = useProducts();
   const discounts = [0, 0.05, 0.10];
-  const finalPrice = Math.round(bundle.bundlePrice * (1 - discounts[activeVol]));
+
+  let hydratedItems = bundleProduct.bundleItems || [];
+  
+  // FALLBACK: If Shopify metafields aren't configured, use local mappings
+  if (hydratedItems.length === 0) {
+    let ids: string[] = [];
+    if (bundleProduct.name.toLowerCase().includes("trio")) {
+      ids = ["ragi", "jowar", "bajra"];
+    } else if (bundleProduct.name.toLowerCase().includes("six") || bundleProduct.name.toLowerCase().includes("6") || bundleProduct.name.toLowerCase().includes("complete")) {
+      ids = ["ragi", "jowar", "bajra", "kangni", "kutki", "kodo"];
+    }
+    
+    // Map from global products list to get prices/images
+    hydratedItems = ids.map(id => {
+      const match = allProducts.find(p => p.id.toLowerCase().includes(id) || p.name.toLowerCase().includes(id));
+      if (!match) return null;
+      const size = match.sizes[0];
+      return {
+        id: match.id,
+        name: match.name,
+        image: match.image,
+        mrp: size?.mrp || 150,
+        price: size?.price || 120,
+        weight: "250g",
+        variantId: size?.variantId || ""
+      };
+    }).filter(Boolean) as any[];
+  }
+  
+  // Base values from the bundle itself, with logical fallbacks
+  const dynamicTotalMrp = hydratedItems.length > 0 ? hydratedItems.reduce((acc, item: any) => acc + item.mrp, 0) : (bundleProduct.sizes && bundleProduct.sizes[0] ? bundleProduct.sizes[0].mrp : 864);
+  const savePct = bundleProduct.savePct || 15;
+  
+  const baseBundlePrice = bundleProduct.sizes[0]?.price || Math.round(dynamicTotalMrp * (1 - savePct / 100));
+  const finalPrice = Math.round(baseBundlePrice * (1 - discounts[activeVol]));
 
   const handleAddBundle = () => {
-    bundle.items.forEach((item) => {
-      const productId = item.name.toLowerCase().split(" ")[0];
-      const product = getProduct(productId);
-      if (product) {
-        const size = product.sizes.find((s) => s.size === item.weight.split(" ")[0]) || product.sizes[0];
-        addItem({
-          productId: product.id,
-          variantId: size.variantId || `${product.id}-${size.size}`,
-          name: product.name,
-          size: size.size,
-          quantity: activeVol + 1,
-          price: size.price,
-          mrp: size.mrp,
-          image: product.image,
-        });
-      }
+    const size = bundleProduct.sizes[0];
+    // Add the actual Bundle Product to the cart so Shopify tracks it as one unit!
+    addItem({
+      productId: bundleProduct.id,
+      variantId: size?.variantId || `${bundleProduct.id}-bundle`,
+      name: bundleProduct.name,
+      size: size?.size || "Bundle",
+      quantity: activeVol + 1,
+      price: finalPrice,
+      mrp: dynamicTotalMrp,
+      image: bundleProduct.image,
     });
     openCart();
   };
 
   return (
     <div
-      className="rounded-2xl overflow-hidden flex flex-col"
+      className="rounded-[24px] w-full overflow-hidden text-white flex flex-col relative"
       style={{
-        background: "rgba(255,255,255,0.05)",
+        background: "rgba(255, 255, 255, 0.05)",
         backdropFilter: "blur(12px)",
-        border: "0.67px solid rgba(255,255,255,0.11)",
+        border: "1px solid rgba(255, 255, 255, 0.11)",
       }}
     >
-      {/* Ribbon */}
-      <div className="text-center py-2.5 font-body text-xs font-black tracking-[0.1em] uppercase" style={{ background: NEON, color: OLIVE_DARK }}>
-        {bundle.ribbon} · {bundle.tag}
+      {/* 1. The Hook */}
+      <div className="text-center py-2.5 font-body text-xs font-black tracking-[0.15em] uppercase" style={{ background: NEON, color: OLIVE_DARK }}>
+        {bundleProduct.ribbon || "✦ Bestseller Combo"} · {bundleProduct.bundleTag || "Best Value"}
       </div>
 
-      <div className="p-5 flex flex-col gap-4 flex-1">
-        <div>
-          <h3 className="font-display font-black text-white text-xl leading-tight mb-1">{bundle.title}</h3>
-          <p className="font-body text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>{bundle.subtitle}</p>
-        </div>
-
-        {/* Product thumbnails + list */}
-        <div className="flex flex-col gap-2.5">
-          {bundle.items.map((item) => (
-            <div key={item.name} className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden"
-                style={{ background: "rgba(255,255,255,0.07)" }}
-              >
-                <img src={item.image} alt={item.name} loading="lazy" decoding="async" className="w-full h-full object-contain p-1" style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.4))" }} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="font-body text-sm font-semibold text-white truncate">{item.name}</div>
-                <div className="font-body text-[10px]" style={{ color: "rgba(255,255,255,0.38)" }}>{item.weight}</div>
-              </div>
-              <span className="font-body text-xs line-through flex-shrink-0" style={{ color: "rgba(255,255,255,0.28)" }}>₹{item.mrp}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
-
-        {/* Volume qty selector */}
-        <div className="flex gap-2">
-          {volumeTiers.map((t, i) => (
-            <button
-              key={t.qty}
-              onClick={() => setActiveVol(i)}
-              className="flex-1 font-body text-xs py-2 rounded-full transition-all duration-200 text-center"
-              style={
-                activeVol === i
-                  ? { background: NEON, color: OLIVE_DARK, fontWeight: 700 }
-                  : { background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.5)" }
+      <div className="p-6 md:p-8 flex flex-col gap-6 flex-1">
+        {/* Header */}
+        <div className="text-center">
+          <h3 className="font-display font-black text-3xl mb-2 tracking-tight text-white leading-tight">{bundleProduct.name}</h3>
+          <p className="font-body text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>
+            {(() => {
+              try {
+                // Ensure rawDesc is firmly initialized as a string
+                const descStr = String(bundleProduct.descriptionHtml || bundleProduct.detailedDescription || bundleProduct.subtitle || "");
+                if (descStr.trim().length === 0) {
+                   return "The foundation of traditional Indian health in one pack (Default)";
+                }
+                const cleaned = descStr.replace(/<[^>]*>?/gm, '').replace(/\s+/g, ' ').trim();
+                if (!cleaned) return "The foundation of traditional Indian health in one pack (Cleaned empty)";
+                return cleaned.length > 120 ? cleaned.substring(0, 120) + "..." : cleaned;
+              } catch(e) {
+                return "Error parsing description";
               }
-            >
-              <div className="font-bold">{t.qty}</div>
-              <div className="text-[9px] opacity-80">{t.label}</div>
-            </button>
-          ))}
+            })()}
+          </p>
         </div>
 
-        {/* Price */}
-        <div className="flex items-end justify-between">
-          <div>
-            <div className="font-body text-xs uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.38)" }}>Bundle Price</div>
-            <div className="font-body text-xs line-through mt-0.5" style={{ color: "rgba(255,255,255,0.3)" }}>MRP ₹{bundle.totalMrp}</div>
-          </div>
-          <div className="text-right">
-            <div className="font-display font-black text-3xl text-white">₹{finalPrice}</div>
-            <span className="font-body text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: NEON_DIM, color: NEON }}>
-              Save {bundle.savePct + Math.round(discounts[activeVol] * 100)}%
-            </span>
+        {/* 2. The Visual (Horizontal layout of packets) */}
+        <div className="relative h-32 rounded-xl flex items-center justify-center p-4 mt-2 mb-2" style={{ background: "linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))" }}>
+          <div className="absolute inset-0 rounded-xl" style={{ background: "linear-gradient(to top, rgba(255,255,255,0.05), transparent)" }} />
+          <div className="flex items-center -space-x-4 relative z-10 w-full justify-center overflow-x-auto no-scrollbar py-4 px-2">
+            {hydratedItems.map((item: any, idx: number) => {
+              const total = hydratedItems.length;
+              // Add a slight cascade effect
+              const rotation = total === 3 ? (idx === 0 ? '-5deg' : idx === 2 ? '5deg' : '0deg') : '0deg';
+              const zIndex = total === 3 ? (idx === 1 ? 10 : 5) : 5 + idx;
+              const scale = total === 3 ? (idx === 1 ? 'scale(1.15)' : 'scale(1)') : 'scale(1)';
+              
+              return (
+                <img 
+                  key={item.id} 
+                  src={item.image} 
+                  alt={item.name} 
+                  className={`object-cover rounded-lg flex-shrink-0 ${total > 3 ? 'w-16 h-20 -space-x-6' : 'w-20 h-24'}`}
+                  style={{
+                    transform: `rotate(${rotation}) ${scale}`,
+                    zIndex,
+                    filter: "drop-shadow(0 10px 15px rgba(0,0,0,0.5))",
+                    transition: "transform 0.3s ease"
+                  }}
+                />
+              )
+            })}
           </div>
         </div>
 
-        {/* CTA */}
-        <button
-          onClick={handleAddBundle}
-          className="w-full font-body text-sm font-bold tracking-[0.05em] uppercase py-4 rounded-full flex items-center justify-center gap-2 transition-all duration-200 hover:brightness-110 mt-auto"
-          style={{ background: NEON, color: OLIVE_DARK, boxShadow: `0 3px 12px ${NEON}28`, willChange: "filter" }}
-        >
-          <svg viewBox="0 0 24 24" className="w-4 h-4 stroke-current fill-none stroke-2">
-            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <path d="M16 10a4 4 0 01-8 0" />
-          </svg>
-          Add to Cart — ₹{finalPrice}
-        </button>
+        {/* 3. The Science / The Why */}
+        <div className="rounded-xl p-4 border" style={{ background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.1)" }}>
+          <div className="flex items-center gap-2 mb-3">
+            <svg className="w-4 h-4" style={{ color: NEON }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span className="font-body text-xs font-bold uppercase tracking-wider" style={{ color: NEON }}>Scientific Synergy</span>
+          </div>
+          <ul className="space-y-2.5">
+            {hydratedItems.slice(0, 3).map((item: any) => {
+               // Extract short name "Ragi" from "Liimra Naturals - Ragi Flour"
+               const itemName = item.name.toLowerCase();
+               let shortName = "Flour";
+               if (itemName.includes("ragi")) shortName = "Ragi";
+               else if (itemName.includes("jowar")) shortName = "Jowar";
+               else if (itemName.includes("bajra")) shortName = "Bajra";
+               else if (itemName.includes("kangni")) shortName = "Kangni";
+               else if (itemName.includes("kutki")) shortName = "Kutki";
+               else if (itemName.includes("kodo")) shortName = "Kodo";
 
-        <p className="font-body text-center text-[10px]" style={{ color: "rgba(255,255,255,0.28)" }}>
-          ✓ COD available · Free shipping · 30-day guarantee
-        </p>
+               // Get a fake descriptive benefit if product object doesn't have it loaded natively from fallback lookup
+               const actualProd = allProducts.find(p => p.id === item.id);
+               const benefit = actualProd?.primaryBenefit || "Nutrient-dense ancient grain for daily health.";
+               
+               return (
+                 <li key={item.id} className="flex items-start gap-3 font-body text-sm" style={{ color: "rgba(255,255,255,0.8)" }}>
+                    <span className="mt-0.5" style={{ color: "rgba(255,255,255,0.4)" }}>•</span>
+                    <span><strong className="text-white">{shortName}:</strong> {benefit}</span>
+                 </li>
+               )
+            })}
+            {hydratedItems.length > 3 && (
+               <li className="flex items-start gap-3 font-body text-sm text-white/50 italic">
+                  <span className="mt-0.5">•</span>
+                  <span>Plus {hydratedItems.length - 3} more powerful grains...</span>
+               </li>
+            )}
+          </ul>
+        </div>
+
+        {/* 4. Pricing & Interaction */}
+        <div className="mt-auto pt-2 flex flex-col gap-6">
+          {/* Volume Tabs */}
+          <div className="flex gap-2">
+            {volumeTiers.map((t, i) => (
+              <button
+                key={t.qty}
+                onClick={() => setActiveVol(i)}
+                className="flex-1 font-body py-2.5 rounded-lg text-center transition-all duration-200"
+                style={
+                  activeVol === i
+                    ? { background: NEON, color: OLIVE_DARK, fontWeight: 700 }
+                    : { background: "rgba(255,255,255,0.05)", color: "rgba(255,255,255,0.5)" }
+                }
+              >
+                <div className="text-sm font-bold">{t.qty} {i === 0 ? "Pack" : ""}</div>
+                {i > 0 && <div className="block text-[10px] uppercase mt-0.5">{t.label}</div>}
+              </button>
+            ))}
+          </div>
+
+          {/* Price Summary */}
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="font-body text-xs uppercase tracking-wider mb-1" style={{ color: "rgba(255,255,255,0.4)" }}>Bundle Total</div>
+              <div className="font-body text-xs line-through" style={{ color: "rgba(255,255,255,0.3)" }}>MRP ₹{dynamicTotalMrp}</div>
+            </div>
+            <div className="text-right flex flex-col items-end gap-1">
+              <div className="font-display text-3xl font-black text-white leading-none">₹{finalPrice}</div>
+              <span className="font-body text-[10px] font-bold px-2 py-1 rounded inline-block" style={{ background: NEON_DIM, color: NEON }}>
+                SAVE {savePct + Math.round(discounts[activeVol] * 100)}%
+              </span>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <button
+            onClick={handleAddBundle}
+            className="w-full font-body font-bold tracking-[0.05em] uppercase py-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 hover:brightness-110"
+            style={{ background: NEON, color: OLIVE_DARK, boxShadow: `0 4px 14px rgba(174,179,10,0.3)` }}
+          >
+            <svg viewBox="0 0 24 24" className="w-5 h-5 stroke-current fill-none stroke-2">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 01-8 0" />
+            </svg>
+            Add Complete Protocol
+          </button>
+          
+          <p className="font-body text-center text-[10px] uppercase tracking-wide font-medium" style={{ color: "rgba(255,255,255,0.3)" }}>
+            ✓ COD AVAILABLE · FREE SHIPPING
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -191,9 +239,12 @@ const BundleSection = memo(() => {
   const [activeVol0, setActiveVol0] = useState(0);
   const [activeVol1, setActiveVol1] = useState(0);
   const sectionRef = useScrollReveal();
+  const { products } = useProducts();
 
   const handleSetActiveVol0 = useCallback((i: number) => setActiveVol0(i), []);
   const handleSetActiveVol1 = useCallback((i: number) => setActiveVol1(i), []);
+
+  const bundlesToDisplay = products.filter(p => p.isBundle === true).slice(0, 2);
 
   return (
     <section
@@ -202,7 +253,6 @@ const BundleSection = memo(() => {
       className="relative overflow-hidden scroll-reveal-scale"
       style={{ background: OLIVE_DARK, padding: "96px 0" }}
     >
-      {/* Radial neon glows */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -213,7 +263,6 @@ const BundleSection = memo(() => {
       />
 
       <div className="relative max-w-6xl mx-auto px-6">
-        {/* Header */}
         <div className="mb-12">
           <div className="flex items-center gap-2.5 mb-4 justify-center">
             <div className="w-8 h-px" style={{ background: NEON }} />
@@ -233,13 +282,17 @@ const BundleSection = memo(() => {
           </p>
         </div>
 
-        {/* Two bundle cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <BundleCard bundle={bundles[0]} activeVol={activeVol0} setActiveVol={handleSetActiveVol0} />
-          <BundleCard bundle={bundles[1]} activeVol={activeVol1} setActiveVol={handleSetActiveVol1} />
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto min-h-[400px]">
+          {bundlesToDisplay.length === 0 ? (
+            <div className="col-span-2 flex items-center justify-center text-white/50 text-sm font-body tracking-wider uppercase">Loading Bundles...</div>
+          ) : (
+            <>
+              {bundlesToDisplay[0] && <BundleCard allProducts={products} bundleProduct={bundlesToDisplay[0]} activeVol={activeVol0} setActiveVol={handleSetActiveVol0} />}
+              {bundlesToDisplay[1] && <BundleCard allProducts={products} bundleProduct={bundlesToDisplay[1]} activeVol={activeVol1} setActiveVol={handleSetActiveVol1} />}
+            </>
+          )}
         </div>
 
-        {/* Trust line */}
         <div className="flex flex-wrap items-center justify-center gap-6 mt-12">
           {[
             { icon: <><rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" /></>, label: "COD Available" },
