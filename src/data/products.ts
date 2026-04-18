@@ -38,6 +38,7 @@ export interface Product {
     textLight: string;
   };
   image: string;
+  images?: string[];
   imageBg: string;
   tagline: string;
   detailedDescription: string;

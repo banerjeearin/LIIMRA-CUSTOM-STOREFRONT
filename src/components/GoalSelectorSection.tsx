@@ -101,7 +101,7 @@ const ProductCard = memo(({ product }: { product: Product }) => {
 
       <div className="relative flex flex-col sm:flex-row items-stretch" style={{ zIndex: 1, minHeight: "300px" }}>
         <div
-          className="relative flex items-center justify-center shrink-0 overflow-hidden"
+          className="relative flex flex-col items-center justify-start shrink-0 overflow-hidden transition-all duration-500"
           style={{
             width: "100%",
             maxWidth: "360px",
@@ -116,27 +116,69 @@ const ProductCard = memo(({ product }: { product: Product }) => {
               background: "radial-gradient(ellipse at center, rgba(255,255,255,0.06) 20%, transparent 70%)",
             }}
           />
-          <img
-            src={product.image}
-            alt={product.name}
-            loading="lazy"
-            decoding="async"
-            className="relative transition-transform duration-700 group-hover:scale-[1.06]"
-            style={{
-              height: "290px",
-              width: "auto",
-              objectFit: "contain",
-              filter: "drop-shadow(0 10px 28px rgba(0,0,0,0.45))",
-              padding: "10px 16px",
-              willChange: "transform",
+          
+          {/* Main Primary Image */}
+          <div className="relative flex items-center justify-center w-full" style={{ flex: scienceExpanded ? "0 0 auto" : "1 1 auto", minHeight: "300px", paddingTop: scienceExpanded ? "2rem" : "0" }}>
+            <img
+              src={product.image}
+              alt={product.name}
+              loading="lazy"
+              decoding="async"
+              className="relative transition-transform duration-700 group-hover:scale-[1.06]"
+              style={{
+                height: scienceExpanded ? "220px" : "290px",
+                width: "auto",
+                objectFit: "contain",
+                filter: "drop-shadow(0 10px 28px rgba(0,0,0,0.45))",
+                padding: "10px 16px",
+                willChange: "transform",
+              }}
+            />
+            <span
+              className="absolute bottom-4 left-4 font-body text-[10px] font-bold tracking-[0.12em] uppercase px-3 py-1 rounded-full z-10"
+              style={{ background: "rgba(174,179,10,0.20)", color: "#c8cc00", backdropFilter: "blur(6px)" }}
+            >
+              {product.badge}
+            </span>
+          </div>
+
+          {/* Expanded Media Pictures (Left Side under Main Picture) */}
+          <div 
+            className="w-full flex flex-col gap-6 px-6 pb-8 transition-all duration-500 max-h-0 opacity-0 overflow-hidden"
+            style={{ 
+              maxHeight: scienceExpanded ? "1200px" : "0px",
+              opacity: scienceExpanded ? 1 : 0,
+              marginTop: scienceExpanded ? "1.5rem" : "0"
             }}
-          />
-          <span
-            className="absolute bottom-4 left-4 font-body text-[10px] font-bold tracking-[0.12em] uppercase px-3 py-1 rounded-full"
-            style={{ background: "rgba(174,179,10,0.20)", color: "#c8cc00", backdropFilter: "blur(6px)" }}
           >
-            {product.badge}
-          </span>
+            {product.images && product.images.length > 1 && (
+              <>
+                <div className="w-full h-px bg-white/20 mb-2"></div>
+                <p className="font-body text-[10px] font-bold tracking-[0.14em] uppercase text-center text-white/50">
+                  PRODUCT INFORMATION
+                </p>
+                <div className="flex flex-col items-center gap-6 w-full">
+                  {product.images.slice(1).map((imgUrl, idx) => (
+                    <img 
+                      key={idx}
+                      src={imgUrl} 
+                      alt={`${product.name} Media ${idx + 2}`} 
+                      loading="lazy" 
+                      decoding="async"
+                      className="object-contain rounded-xl shadow-2xl transition-transform duration-500 hover:scale-[1.03]"
+                      style={{ 
+                        height: "220px", 
+                        width: "auto", 
+                        maxWidth: "100%",
+                        backgroundColor: "white",
+                        padding: imgUrl.includes("transparent") ? "0" : "4px" // Small padding inside the white bg
+                      }}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="flex flex-col justify-center flex-1 px-8 py-8 gap-4">

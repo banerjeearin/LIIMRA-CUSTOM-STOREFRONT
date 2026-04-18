@@ -148,6 +148,7 @@ const mapShopifyProductToProduct = (shopifyProduct: ShopifyProduct): Product => 
     recipes,
     colorTheme,
     image: imageNodes[0]?.url || imageNodes[0]?.src || "",
+    images: imageNodes.map((n: any) => n.url || n.src).filter(Boolean),
     imageBg,
     tagline,
     detailedDescription: detailedDescription,
