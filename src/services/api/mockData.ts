@@ -21,10 +21,15 @@ export const mockDataService: APIService = {
   },
 
   createCheckout: async (items: CartItem[]): Promise<{ checkoutUrl: string }> => {
-    await delay(500);
-    console.log("Mock checkout created with items:", items);
-    return {
-      checkoutUrl: "/checkout-success?mock=true",
-    };
+    await delay(300);
+    return { checkoutUrl: "https://mock-checkout.com/?cart=" + items.length };
   },
+
+  getPolicy: async (type: "refundPolicy" | "privacyPolicy" | "termsOfService" | "shippingPolicy") => {
+    await delay(300);
+    return {
+      title: type.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
+      body: `<p>This is a mock response for the <strong>${type}</strong>. When a live Shopify connection is established, the authentic legal document provided in the Storefront settings will be rendered here.</p>`
+    };
+  }
 };

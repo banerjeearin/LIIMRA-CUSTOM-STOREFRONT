@@ -20,12 +20,7 @@ const infoItems = [
     desc: "COD available pan-India. Also UPI, credit/debit cards, net banking.",
     color: "260 40% 45%",
   },
-  {
-    icon: RotateCcw,
-    title: "30-Day Guarantee",
-    desc: "Full refund, no questions asked. Your satisfaction is our priority.",
-    color: "38 55% 45%",
-  },
+
   {
     icon: MessageCircle,
     title: "WhatsApp Support",

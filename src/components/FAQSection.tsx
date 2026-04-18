@@ -8,7 +8,7 @@ const NEON = "#aeb30a";
 const faqs = [
   {
     q: "Will my family actually eat this?",
-    a: "Millet rotis are soft, nutty, and delicious when made right. We include recipe guides + WhatsApp support. 30-day guarantee if your family doesn't like it.",
+    a: "Millet rotis are soft, nutty, and delicious when made right. We include recipe guides + WhatsApp support.",
   },
   {
     q: "Where should I start?",

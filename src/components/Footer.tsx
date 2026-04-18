@@ -1,5 +1,7 @@
-import { memo } from "react";
+import { useState, memo } from "react";
 import { Instagram, Facebook, Mail } from "lucide-react";
+import PolicyModal from "@/components/ui/PolicyModal";
+import type { PolicyType } from "@/services/api/types";
 
 const OLIVE_DEEPER = "#2d3815";
 const NEON = "#aeb30a";
@@ -7,6 +9,8 @@ const NEON = "#aeb30a";
 const products = ["Ragi Flour", "Jowar Flour", "Bajra Flour", "Kangni Flour", "Kutki Flour", "Rice Flour"];
 
 const Footer = memo(() => {
+  const [activePolicy, setActivePolicy] = useState<PolicyType | null>(null);
+
   return (
     <footer className="relative overflow-hidden" style={{ background: OLIVE_DEEPER }}>
       {/* Marquee strip — food & grain icons only, no text */}
@@ -274,8 +278,8 @@ const Footer = memo(() => {
         <div className="flex flex-wrap items-center justify-center gap-6 mb-6 text-white/70 font-body text-sm">
           <span>✓ Fresh in 48hrs</span>
           <span>✓ Zero additives</span>
-          <span>✓ 30-day refund</span>
-          <span>✓ WhatsApp support</span>
+          <button onClick={() => setActivePolicy("shippingPolicy")} className="hover:text-white hover:underline transition-colors">✓ Shipping Policy</button>
+          <button onClick={() => setActivePolicy("refundPolicy")} className="hover:text-white hover:underline transition-colors">✓ Refund & Exchange Policy</button>
         </div>
         <div className="text-center">
           <p className="font-body text-sm text-white/80">Questions? WhatsApp: +91-93217-31372</p>
@@ -413,15 +417,22 @@ const Footer = memo(() => {
             © {new Date().getFullYear()} Liimra Naturals. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <a href="#" className="font-body text-xs text-white/60 hover:text-white/90 transition-colors">
+            <button onClick={() => setActivePolicy("privacyPolicy")} className="font-body text-xs text-white/60 hover:text-white/90 transition-colors">
               Privacy Policy
-            </a>
-            <a href="#" className="font-body text-xs text-white/60 hover:text-white/90 transition-colors">
+            </button>
+            <button onClick={() => setActivePolicy("termsOfService")} className="font-body text-xs text-white/60 hover:text-white/90 transition-colors">
               Terms of Service
-            </a>
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Policy Modal Injection */}
+      <PolicyModal 
+        isOpen={activePolicy !== null} 
+        onClose={() => setActivePolicy(null)}
+        policyType={activePolicy || "refundPolicy"} 
+      />
     </footer>
   );
 });

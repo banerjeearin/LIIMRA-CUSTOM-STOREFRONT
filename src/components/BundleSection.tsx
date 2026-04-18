@@ -91,8 +91,15 @@ const BundleCard = memo(({ bundleProduct, allProducts, activeVol, setActiveVol }
           <p className="font-body text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>
             {(() => {
               try {
-                // Ensure rawDesc is firmly initialized as a string
-                const descStr = String(bundleProduct.descriptionHtml || bundleProduct.detailedDescription || bundleProduct.subtitle || "");
+                let descStr = bundleProduct.subtitle || bundleProduct.detailedDescription || "";
+                
+                // If we need to fallback to the raw HTML description, extract ONLY the first paragraph
+                // so we don't accidentally render embedded <h2> titles or giant lists
+                if (!descStr && bundleProduct.descriptionHtml) {
+                  const pMatch = bundleProduct.descriptionHtml.match(/<p>([\s\S]*?)<\/p>/i);
+                  descStr = pMatch && pMatch[1] ? pMatch[1] : bundleProduct.descriptionHtml;
+                }
+
                 if (descStr.trim().length === 0) {
                    return "The foundation of traditional Indian health in one pack (Default)";
                 }
@@ -296,7 +303,6 @@ const BundleSection = memo(() => {
         <div className="flex flex-wrap items-center justify-center gap-6 mt-12">
           {[
             { icon: <><rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" /></>, label: "COD Available" },
-            { icon: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></>, label: "30-Day Guarantee" },
             { icon: <><path d="M5 12h14M12 5l7 7-7 7" /></>, label: "Ships in 48 hrs" },
             { icon: <><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" /></>, label: "WhatsApp Support" },
           ].map((t) => (

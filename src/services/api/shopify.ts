@@ -365,4 +365,31 @@ export const shopifyService: APIService = {
       checkoutUrl: checkoutUrl.toString(),
     };
   },
+
+  getPolicy: async (type: PolicyType): Promise<{title: string, body: string} | null> => {
+    try {
+      const query = `
+        query GetPolicy {
+          shop {
+            ${type} {
+              title
+              body
+            }
+          }
+        }
+      `;
+
+      const data = await shopifyFetch(query);
+      if (data?.shop?.[type]) {
+        return {
+          title: data.shop[type].title,
+          body: data.shop[type].body,
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error("Policy fetch failed:", error);
+      return null;
+    }
+  }
 };

@@ -66,9 +66,12 @@ export interface Collection {
   tag: string;
 }
 
+export type PolicyType = "refundPolicy" | "privacyPolicy" | "termsOfService" | "shippingPolicy";
+
 export interface APIService {
   getProducts: () => Promise<Product[]>;
   getProduct: (id: string) => Promise<Product | null>;
   getCollections: () => Promise<Collection[]>;
   createCheckout: (items: CartItem[]) => Promise<{ checkoutUrl: string }>;
+  getPolicy: (type: PolicyType) => Promise<{title: string, body: string} | null>;
 }
