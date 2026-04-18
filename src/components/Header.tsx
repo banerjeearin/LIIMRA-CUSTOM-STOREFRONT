@@ -3,7 +3,7 @@ import { ShoppingBag, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useCart } from "@/contexts/CartContext";
 
-const navItems = ["Shop", "Bundles", "Recipes", "About"];
+const navItems = ["Shop", "Bundles", "Recipes", "Why Liimra"];
 
 const Header = memo(() => {
   const [mobileOpen, setMobileOpen] = useState(false);

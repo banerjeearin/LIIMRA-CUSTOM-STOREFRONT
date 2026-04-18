@@ -27,8 +27,8 @@ const faqs = [
     a: "Low glycaemic index. Recommended by dietitians. Customers report 15-20% HbA1c improvement in 3 months. Consult your doctor.",
   },
   {
-    q: "What if I'm not satisfied?",
-    a: "30-day refund. No questions asked. Even if your kids won't eat it. WhatsApp us anytime.",
+    q: "What if we don't like it?",
+    a: "We strive for 100% satisfaction. Please check our Refund & Exchange Policy at the bottom of the page. WhatsApp us anytime.",
   },
   {
     q: "Can children eat these?",

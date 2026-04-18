@@ -241,7 +241,7 @@ const ProductDrawer = memo(({ isOpen, onClose, productId, onNavigate }: ProductD
 
           <div className="pt-6 border-t border-[hsl(var(--liimra-border))] flex flex-wrap gap-4 justify-center text-xs font-body pb-4" style={{ color: "hsl(var(--liimra-ink-light))" }}>
             <span>✓ 48hr fresh</span>
-            <span>✓ 30-day refund</span>
+            <span>✓ FSSAI Certified</span>
             <span>✓ WhatsApp support</span>
           </div>
         </div>

@@ -62,7 +62,7 @@ const recipes = [
     steps: ["Cook kutki flour with split moong dal", "Temper with ghee, cumin, pepper, ginger", "Stir to creamy consistency", "Serve with sambar or coconut chutney"],
   },
   {
-    id: "rice",
+    id: "rice-flour",
     tag: "Rice Flour · Breakfast",
     name: "Soft Idli",
     desc: "Fluffy, melt-in-the-mouth idli made with stone-ground rice flour. No additives means you taste the true, clean flavour of whole rice. Lighter, softer, and more digestible than commercial rice flour idlis.",

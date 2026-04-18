@@ -103,7 +103,7 @@ const grains = [
     highlight: "9.3mg iron/100g — highest among all millets",
   },
   {
-    id: "rice",
+    id: "rice-flour",
     label: "Rice Flour",
     image: "/products/.webp",
     latinName: "Oryza sativa",

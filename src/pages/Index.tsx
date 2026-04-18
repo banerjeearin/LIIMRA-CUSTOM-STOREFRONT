@@ -24,7 +24,7 @@ const deckCards = [
   { id: "kangni", name: "Kangni Flour", image: "/products/kangni-250gm.webp" },
   { id: "kutki",  name: "Kutki Flour",  image: "/products/kutki-250gm.webp" },
   { id: "ragi",   name: "Ragi Flour",   image: "/products/ragi-250gm.webp" },
-  { id: "rice",   name: "Rice Flour",   image: "/products/rice-500gm.webp" },
+  { id: "rice-flour",   name: "Rice Flour",   image: "/products/rice-500gm.webp" },
 ];
 
 // Base config for desktop (1200px+)
@@ -732,7 +732,7 @@ const Index = () => {
           <a className="diff-cta-primary" href="#shop">
             Shop Fresh Flour <span style={{ fontSize: "16px" }}>&#8594;</span>
           </a>
-          <button className="diff-cta-secondary">Learn our process</button>
+          <a href="#why-liimra" className="diff-cta-secondary">Learn our process</a>
         </div>
 
       </section>

@@ -22,9 +22,9 @@ const pillars = [
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
       </svg>
     ),
-    title: "Zero Risk",
+    title: "Zero Additives",
     description:
-      "30-day money-back. Even if your kids won't eat it.",
+      "100% pure and natural ingredients without any artificial preservatives or chemicals.",
   },
   {
     icon: (
@@ -45,6 +45,7 @@ const WhyLiimraSection = memo(() => {
 
   return (
     <section
+      id="why-liimra"
       ref={sectionRef}
       className="scroll-reveal-right"
       style={{ background: "hsl(var(--liimra-cream))", padding: "96px 0" }}
@@ -61,6 +62,42 @@ const WhyLiimraSection = memo(() => {
             centered
             typewriter
           />
+        </div>
+
+        <div className="bg-white rounded-3xl p-8 md:p-12 mb-16 shadow-[0_4px_24px_rgba(62,76,29,0.06)] border border-[hsl(var(--liimra-border))] scroll-reveal-up relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none" style={{ background: `radial-gradient(circle, ${OLIVE} 0%, transparent 70%)` }}></div>
+          <div className="grid md:grid-cols-2 gap-8 md:gap-16 relative z-10">
+            <div>
+              <h3 className="font-display font-black text-2xl mb-4" style={{ color: OLIVE }}>
+                Our Millet Journey
+                <span className="block text-sm font-body font-semibold tracking-widest uppercase mt-2 opacity-60">
+                  A Path to Wholesome Living
+                </span>
+              </h3>
+              <p className="font-body text-[15px] leading-relaxed mb-4" style={{ color: "hsl(var(--liimra-ink-mid))" }}>
+                The story of Liimra Naturals began with the realization that modern diets have moved away from natural, nutrient-rich foods.
+              </p>
+              <p className="font-body text-[15px] leading-relaxed" style={{ color: "hsl(var(--liimra-ink-mid))" }}>
+                Millets, ancient grains packed with essential nutrients, emerged as the solution to today's nutritional challenges.
+              </p>
+            </div>
+            
+            <div className="relative">
+              <div className="hidden md:block absolute left-[-2rem] top-4 bottom-4 w-px" style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--liimra-border)), transparent)" }}></div>
+              <h3 className="font-display font-black text-2xl mb-4" style={{ color: OLIVE }}>
+                Our Purpose
+                <span className="block text-sm font-body font-semibold tracking-widest uppercase mt-2 opacity-0 select-none">
+                  _ 
+                </span>
+              </h3>
+              <p className="font-body text-[15px] leading-relaxed mb-5" style={{ color: "hsl(var(--liimra-ink-mid))" }}>
+                At Liimra Naturals, we believe in food that is pure, honest, and real. We are on this journey because we want to make healthy choices simple and accessible for everyone.
+              </p>
+              <p className="font-body text-[16px] leading-relaxed font-bold italic" style={{ color: NEON }}>
+                "This is more than just a business for us—it's a commitment to you and to future generations."
+              </p>
+            </div>
+          </div>
         </div>
 
         <div ref={pillarsRef} className="grid md:grid-cols-3 gap-8 scroll-reveal-stagger">
