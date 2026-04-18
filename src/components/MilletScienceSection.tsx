@@ -10,7 +10,7 @@ const grains = [
   {
     id: "ragi",
     label: "Ragi",
-    image: "/products/ragi-250gm.png",
+    image: "/products/.webp",
     latinName: "Eleusine coracana",
     subTitle: "Finger Millet",
     title: "Ragi — Nature's Calcium Vault",
@@ -29,7 +29,7 @@ const grains = [
   {
     id: "jowar",
     label: "Jowar",
-    image: "/products/jowar-250gm.png",
+    image: "/products/.webp",
     latinName: "Sorghum bicolor",
     subTitle: "Sorghum",
     title: "Jowar — The Gut-Friendly Wheat Substitute",
@@ -48,7 +48,7 @@ const grains = [
   {
     id: "bajra",
     label: "Bajra",
-    image: "/products/bajra-250gm.png",
+    image: "/products/.webp",
     latinName: "Pennisetum glaucum",
     subTitle: "Pearl Millet",
     title: "Bajra — The Iron & Energy Warrior",
@@ -67,7 +67,7 @@ const grains = [
   {
     id: "kangni",
     label: "Kangni",
-    image: "/products/kangni-250gm.png",
+    image: "/products/.webp",
     latinName: "Setaria italica",
     subTitle: "Foxtail Millet",
     title: "Kangni — The Metabolism Booster",
@@ -86,7 +86,7 @@ const grains = [
   {
     id: "kutki",
     label: "Kutki",
-    image: "/products/kutki-250gm.png",
+    image: "/products/.webp",
     latinName: "Panicum sumatrense",
     subTitle: "Little Millet",
     title: "Kutki — The Gentle Gut Healer",
@@ -105,7 +105,7 @@ const grains = [
   {
     id: "rice",
     label: "Rice Flour",
-    image: "/products/rice-500gm.png",
+    image: "/products/.webp",
     latinName: "Oryza sativa",
     subTitle: "Stone-Ground Rice",
     title: "Rice Flour — The Versatile Clean Base",

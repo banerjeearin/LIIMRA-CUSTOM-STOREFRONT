@@ -61,7 +61,7 @@ export const products: Product[] = [
     reviews: 324,
     primaryTags: ["Low GI", "High Calcium", "Gluten-Free"],
     secondaryTags: ["Diabetes Friendly", "B-Vitamins"],
-    image: "/products/ragi-250gm.png",
+    image: "/products/.webp",
     imageBg: "linear-gradient(160deg, hsl(74 30% 26%), hsl(74 35% 18%))",
     tagline: "💚 Kids love it. Moms trust it. Doctors recommend it.",
     sizes: [
@@ -115,7 +115,7 @@ export const products: Product[] = [
     reviews: 218,
     primaryTags: ["High Protein", "High Fibre", "Gluten-Free"],
     secondaryTags: ["Low Carb", "Diabetes Friendly"],
-    image: "/products/jowar-250gm.png",
+    image: "/products/.webp",
     imageBg: "linear-gradient(160deg, hsl(32 45% 35%), hsl(28 40% 22%))",
     tagline: "🍞 Tastes like wheat. None of the gluten.",
     sizes: [
@@ -169,7 +169,7 @@ export const products: Product[] = [
     reviews: 196,
     primaryTags: ["Iron-Rich", "High Fibre", "Gluten-Free"],
     secondaryTags: ["Energy Dense", "Winter Powerhouse"],
-    image: "/products/bajra-1kg.png",
+    image: "/products/.webp",
     imageBg: "linear-gradient(160deg, hsl(42 42% 32%), hsl(38 38% 20%))",
     tagline: "🔥 Rajasthan's winter secret. Warming & iron-rich.",
     sizes: [
@@ -223,7 +223,7 @@ export const products: Product[] = [
     reviews: 89,
     primaryTags: ["Highest Protein", "Iron-Rich", "Gluten-Free"],
     secondaryTags: ["Weight Management", "Diabetes Friendly"],
-    image: "/products/kangni-250gm.png",
+    image: "/products/.webp",
     imageBg: "linear-gradient(160deg, hsl(160 35% 28%), hsl(160 40% 18%))",
     tagline: "⚡ Highest protein. Metabolism booster.",
     sizes: [
@@ -277,7 +277,7 @@ export const products: Product[] = [
     reviews: 142,
     primaryTags: ["Ultra Low GI", "Gluten-Free", "Weight Loss"],
     secondaryTags: ["Easy Digestion", "PCOS Friendly"],
-    image: "/products/kutki-250gm.png",
+    image: "/products/.webp",
     imageBg: "linear-gradient(160deg, hsl(52 35% 45%), hsl(48 30% 28%))",
     tagline: "💛 The gentle detoxifier. Light on the stomach, heavy on health.",
     sizes: [
@@ -331,7 +331,7 @@ export const products: Product[] = [
     reviews: 132,
     primaryTags: ["Additives Free", "High Protein", "Rich in Fiber"],
     secondaryTags: ["Easy Digestion", "Diabetes Friendly"],
-    image: "/products/kodo-500gm.png",
+    image: "/products/.webp",
     imageBg: "linear-gradient(160deg, hsl(110 35% 35%), hsl(105 45% 20%))",
     tagline: "🌾 A Path to Wholesome Living.",
     sizes: [
@@ -384,7 +384,7 @@ export const products: Product[] = [
     reviews: 412,
     primaryTags: ["Triple Power", "High Protein", "High Iron"],
     secondaryTags: ["Additives Free", "Gluten-Free"],
-    image: "/products/combo-3pack.png",
+    image: "/products/.webp",
     imageBg: "linear-gradient(160deg, hsl(35 40% 40%), hsl(30 35% 25%))",
     tagline: "🔥 The foundation of traditional Indian health in one pack.",
     sizes: [
@@ -437,7 +437,7 @@ export const products: Product[] = [
     reviews: 589,
     primaryTags: ["Complete Set", "Maximum Rotation", "Total Detox"],
     secondaryTags: ["Additives Free", "Gluten-Free"],
-    image: "/products/combo-6pack.png",
+    image: "/products/.webp",
     imageBg: "linear-gradient(160deg, hsl(50 35% 45%), hsl(30 35% 25%))",
     tagline: "✨ The ultimate transformation protocol for your pantry.",
     sizes: [
@@ -490,7 +490,7 @@ export const products: Product[] = [
     reviews: 215,
     primaryTags: ["Low Cholesterol", "Rich in Fiber", "Additives Free"],
     secondaryTags: ["Easy Digestion", "Aromatic"],
-    image: "/products/indrayani-1kg.png",
+    image: "/products/.webp",
     imageBg: "linear-gradient(160deg, hsl(0 0% 95%), hsl(0 0% 80%))",
     tagline: "❤️ The Heart-Smart Choice for Every Meal",
     sizes: [
@@ -543,7 +543,7 @@ export const products: Product[] = [
     reviews: 154,
     primaryTags: ["Versatile Base", "Low Cholesterol", "Additives Free"],
     secondaryTags: ["Easy Digestion", "Rich in Fiber"],
-    image: "/products/rice-500gm.png",
+    image: "/products/.webp",
     imageBg: "linear-gradient(160deg, hsl(0 0% 95%), hsl(0 0% 85%))",
     tagline: "🔥 Pure. Clean. Versatile.",
     sizes: [
