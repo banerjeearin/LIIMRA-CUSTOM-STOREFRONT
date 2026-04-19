@@ -11,7 +11,7 @@ const infoItems = [
   {
     icon: Truck,
     title: "Ships in 48 Hours",
-    desc: "Pan-India delivery. Free shipping on orders above ₹299.",
+    desc: "Pan-India delivery. Free shipping on all orders.",
     color: "200 50% 40%",
   },
   {

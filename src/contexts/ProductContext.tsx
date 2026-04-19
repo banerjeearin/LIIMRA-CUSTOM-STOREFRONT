@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode } from "react";
+import { createContext, useContext, ReactNode, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { productAPI } from "@/services/api/productService";
 import type { Product } from "@/data/products";
@@ -11,6 +11,8 @@ interface ProductContextType {
   error: Error | null;
   getProduct: (id: string) => Product | undefined;
   getProductsByGoal: (goal: string) => Product[];
+  selectedProductId: string | null;
+  setSelectedProductId: (id: string | null) => void;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -24,6 +26,8 @@ const goalProducts: Record<string, string[]> = {
 };
 
 export const ProductProvider = ({ children }: { children: ReactNode }) => {
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+
   const {
     data: products = [],
     isLoading: isLoadingProducts,
@@ -82,6 +86,8 @@ export const ProductProvider = ({ children }: { children: ReactNode }) => {
         error,
         getProduct,
         getProductsByGoal,
+        selectedProductId,
+        setSelectedProductId,
       }}
     >
       {children}

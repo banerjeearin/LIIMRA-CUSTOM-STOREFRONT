@@ -21,8 +21,8 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const FREE_SHIPPING_THRESHOLD = parseFloat(import.meta.env.VITE_FREE_SHIPPING_THRESHOLD || "299");
-const STANDARD_SHIPPING_COST = parseFloat(import.meta.env.VITE_STANDARD_SHIPPING_COST || "40");
+const FREE_SHIPPING_THRESHOLD = 0; // Unconditional free shipping
+const STANDARD_SHIPPING_COST = 0;
 
 const CART_STORAGE_KEY = "liimra-cart";
 

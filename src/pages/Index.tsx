@@ -2,12 +2,14 @@ import { useState, useEffect, useRef, useMemo, useCallback, Suspense, lazy } fro
 import Header from "@/components/Header";
 import FloatingInfoButton from "@/components/FloatingInfoButton";
 import ScrollProgress from "@/components/ScrollProgress";
+import { useProducts } from "@/contexts/ProductContext";
 import ProductDrawer from "@/components/ProductDrawer";
 import CartDrawer from "@/components/CartDrawer";
 import ViewingNow from "@/components/ViewingNow";
 import { SEO } from "@/components/SEO/SEO";
 import { OrganizationSchema, FAQSchema } from "@/components/SEO/StructuredData";
 import { useImpressionTracker } from "@/hooks/useImpressionTracker";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 
 const GoalSelectorSection = lazy(() => import("@/components/GoalSelectorSection"));
 const BundleSection = lazy(() => import("@/components/BundleSection"));
@@ -38,51 +40,26 @@ const BASE_CARD_CONFIG = [
 ];
 
 function getDeckParams(width: number) {
+  // Added ~180px to deckTop and paddingBottom to accommodate the new testimonial and headlines
   if (width < 400) {
-    // Very small phones â€” tight 3-card fan, hide outer cards
-    return { cardWidth: 140, scale: 0.42, deckTop: 430, deckHeight: 280, paddingBottom: 150 };
+    return { cardWidth: 140, scale: 0.42, deckTop: 610, deckHeight: 280, paddingBottom: 220 };
   }
   if (width < 640) {
-    return { cardWidth: 160, scale: 0.50, deckTop: 470, deckHeight: 320, paddingBottom: 180 };
+    return { cardWidth: 160, scale: 0.50, deckTop: 650, deckHeight: 320, paddingBottom: 250 };
   }
   if (width < 768) {
-    return { cardWidth: 200, scale: 0.60, deckTop: 500, deckHeight: 360, paddingBottom: 210 };
+    return { cardWidth: 200, scale: 0.60, deckTop: 680, deckHeight: 360, paddingBottom: 280 };
   }
   if (width < 1024) {
-    return { cardWidth: 260, scale: 0.75, deckTop: 470, deckHeight: 430, paddingBottom: 250 };
+    return { cardWidth: 260, scale: 0.75, deckTop: 650, deckHeight: 430, paddingBottom: 330 };
   }
-  return { cardWidth: 340, scale: 1.0,  deckTop: 530, deckHeight: 500, paddingBottom: 280 };
+  return { cardWidth: 340, scale: 1.0,  deckTop: 710, deckHeight: 500, paddingBottom: 380 };
 }
-
-// Rotating hero messages for different personas
-const heroMessages = [
-  {
-    persona: "For Moms",
-    headline: "Kids Will Ask for Seconds",
-    subheadline: "Stone-ground millet flours that taste amazing",
-  },
-  {
-    persona: "For Diabetics",
-    headline: "Take Control of Your Blood Sugar",
-    subheadline: "Low-GI flours recommended by doctors",
-  },
-  {
-    persona: "For Wellness",
-    headline: "Clean Eating, Made Simple",
-    subheadline: "Zero additives. Just pure, fresh nutrition",
-  },
-  {
-    persona: "For Fitness",
-    headline: "Fuel Goals, Not Cravings",
-    subheadline: "High-protein, low-GI carbs for performance",
-  },
-];
 
 const Index = () => {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [heroIndex, setHeroIndex] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const { products, selectedProductId, setSelectedProductId } = useProducts();
   const [vw, setVw] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
@@ -119,7 +96,7 @@ const Index = () => {
   const handleProductClick = useCallback((productId: string) => {
     setSelectedProductId(productId);
     setDrawerOpen(true);
-  }, []);
+  }, [setSelectedProductId]);
 
   const handleNavigate = useCallback((direction: "prev" | "next") => {
     setSelectedProductId((currentId) => {
@@ -132,7 +109,7 @@ const Index = () => {
       }
       return deckCards[newIndex].id;
     });
-  }, []);
+  }, [setSelectedProductId]);
 
   const { cardWidth, scale, deckTop, deckHeight, paddingBottom } = useMemo(
     () => getDeckParams(vw),
@@ -154,6 +131,7 @@ const Index = () => {
       <OrganizationSchema />
       <FAQSchema />
       <ScrollProgress />
+      <WhatsAppFloat />
       <Header />
 
       {/* â”€â”€ Hero section â”€â”€ */}
@@ -183,27 +161,11 @@ const Index = () => {
         {/* Hero text block */}
         <div className="flex items-center justify-center pt-24 sm:pt-28 pb-4">
           <div className="w-full max-w-5xl mx-auto px-5 sm:px-6 text-center relative" style={{ zIndex: 10 }}>
-            {/* Persona indicator */}
-            <div className="flex items-center justify-center gap-2 mb-4">
-              {heroMessages.map((msg, i) => (
-                <button
-                  key={msg.persona}
-                  onClick={() => setHeroIndex(i)}
-                  className="transition-all duration-300"
-                  style={{
-                    width: heroIndex === i ? "32px" : "8px",
-                    height: "8px",
-                    borderRadius: "4px",
-                    background: heroIndex === i ? "hsl(var(--liimra-forest))" : "hsl(var(--liimra-border))",
-                    willChange: heroIndex === i ? "width" : "auto",
-                  }}
-                  aria-label={msg.persona}
-                />
-              ))}
-            </div>
-            
-            <p className="font-body text-[10px] sm:text-xs tracking-[0.35em] uppercase text-[hsl(var(--liimra-ink-light))] mb-6 transition-opacity duration-500">
-              {heroMessages[heroIndex].persona}
+            {/* Trust indicator */}
+            <p className="font-body text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-[hsl(var(--liimra-forest))] mb-4 mt-2 flex items-center justify-center gap-3">
+              <span className="w-6 h-[1.5px] bg-[hsl(var(--liimra-forest))] opacity-50"></span>
+              Trusted by 1,400+ Indian families
+              <span className="w-6 h-[1.5px] bg-[hsl(var(--liimra-forest))] opacity-50"></span>
             </p>
             
             <div className="relative min-h-[120px] sm:min-h-[150px] flex flex-col items-center justify-center">
@@ -212,26 +174,20 @@ const Index = () => {
                 style={{
                   fontFamily: "'Arial Black', 'Arial', sans-serif",
                   fontWeight: 900,
-                  fontSize: "clamp(1.5rem, 3.8vw, 3rem)",
+                  fontSize: "clamp(1.5rem, 4vw, 3.2rem)",
                   lineHeight: 1.08,
                   letterSpacing: "-0.02em",
                   textTransform: "uppercase",
-                  animation: "fadeIn 0.6s ease-in-out",
-                  maxWidth: "22ch",
+                  maxWidth: "24ch",
                 }}
-                key={heroIndex}
               >
-                {heroMessages[heroIndex].headline}
+                6 Millets. Zero Additives. Delivered in 48hrs.
               </h1>
               
               <p 
-                className="font-body text-base sm:text-lg text-[hsl(var(--liimra-forest))] mt-4 font-medium animate-fadeIn" 
-                style={{
-                  animation: "fadeIn 0.6s ease-in-out 0.2s both",
-                }}
-                key={`sub-${heroIndex}`}
+                className="font-body text-base sm:text-xl text-[hsl(var(--liimra-forest))] mt-4 sm:mt-6 font-medium animate-fadeIn opacity-90 max-w-2xl" 
               >
-                {heroMessages[heroIndex].subheadline}
+                Stone-ground millet flours that taste amazing and help control blood sugar.
               </p>
             </div>
 
@@ -263,6 +219,19 @@ const Index = () => {
               ))}
             </div>
 
+            {/* Testimonial Quote */}
+            <div className="mt-10 mb-2 flex flex-col items-center animate-fadeIn" style={{ animationDelay: "0.2s", animationFillMode: "both" }}>
+              <p className="font-display text-[22px] sm:text-2xl text-[hsl(var(--liimra-ink))] italic max-w-xl leading-snug">
+                "My diabetic father's sugar levels improved in 3 weeks"
+              </p>
+              <div className="flex items-center gap-2 mt-3">
+                <span className="text-yellow-500">★★★★★</span>
+                <p className="font-body text-xs tracking-wider uppercase text-[hsl(var(--liimra-ink-light))] font-bold">
+                  — Meena, Pune
+                </p>
+              </div>
+            </div>
+
             {/* Primary CTA */}
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-7">
               <a href="#shop" className="font-body text-sm tracking-[0.12em] uppercase px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[hsl(var(--liimra-forest))] text-[hsl(var(--liimra-cream))] hover:scale-105 transition-transform duration-300 shadow-xl font-semibold" style={{ willChange: "transform" }}>
@@ -286,23 +255,38 @@ const Index = () => {
           {deckCards.map((card, i) => {
             const cfg = cardConfig[i];
             const isHovered = hoveredCard === i;
+            const fullProduct = products.find(p => p.id === card.id);
+            const price = fullProduct?.sizes[0]?.price || "99";
+            
             return (
               <div
                 key={card.id}
-                className="absolute bottom-0 cursor-pointer pointer-events-auto"
+                className="absolute bottom-0 cursor-pointer pointer-events-auto flex flex-col items-center"
                 style={{
                   transformOrigin: "50% 100%",
                   transform: isHovered
-                    ? `translate3d(${cfg.translateX}px, ${cfg.translateY - 10}px, 0) rotate(${cfg.rotate * 0.5}deg)`
+                    ? `translate3d(${cfg.translateX}px, ${cfg.translateY - 20}px, 0) rotate(${cfg.rotate * 0.4}deg)`
                     : `translate3d(${cfg.translateX}px, ${cfg.translateY}px, 0) rotate(${cfg.rotate}deg)`,
                   zIndex: isHovered ? 100 : 20 + i,
-                  transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                  transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
                   willChange: isHovered ? "transform" : "auto",
                 }}
                 onMouseEnter={() => setHoveredCard(i)}
                 onMouseLeave={() => setHoveredCard(null)}
                 onClick={() => handleProductClick(card.id)}
               >
+                {/* Tooltip */}
+                <div 
+                  className={`absolute -top-16 bg-white text-[#2c2c1a] px-4 py-2.5 rounded-full shadow-xl font-body text-sm font-bold whitespace-nowrap flex items-center gap-2 transition-all duration-300 pointer-events-none border border-[#e8e3d0] ${isHovered ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95'}`}
+                  style={{ zIndex: 110 }}
+                >
+                  {card.name} <span className="text-[#aeb30a]">₹{price}</span>
+                  <span className="text-[#888] font-normal text-xs ml-1">(Click to view)</span>
+                  
+                  {/* Tooltip pointer */}
+                  <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-b border-r border-[#e8e3d0] transform rotate-45"></div>
+                </div>
+
                 <img
                   src={card.image}
                   alt={card.name}
@@ -315,7 +299,7 @@ const Index = () => {
                     mixBlendMode: "multiply",
                     display: "block",
                     transition: "transform 0.45s ease",
-                    transform: isHovered ? "scale(1.02)" : "scale(1)",
+                    transform: isHovered ? "scale(1.04)" : "scale(1)",
                   }}
                 />
               </div>
@@ -749,9 +733,13 @@ const Index = () => {
 
       <FloatingInfoButton />
       
+      {/* Global Product Drawer */}
       <ProductDrawer
-        isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
+        isOpen={drawerOpen || selectedProductId !== null}
+        onClose={() => {
+          setDrawerOpen(false);
+          setSelectedProductId(null);
+        }}
         productId={selectedProductId}
         onNavigate={handleNavigate}
       />

@@ -391,7 +391,7 @@ const ProductDrawer = memo(({ isOpen, onClose, productId, onNavigate }: ProductD
           </button>
 
           <p className="font-body text-xs text-center mt-2" style={{ color: "hsl(var(--liimra-ink-light))" }}>
-            ✓ Free shipping above ₹299 · COD available
+            ✓ Free shipping · COD available
           </p>
         </div>
       </SheetContent>

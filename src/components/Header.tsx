@@ -1,19 +1,21 @@
 import { useState, memo } from "react";
-import { ShoppingBag, Menu } from "lucide-react";
+import { ShoppingCart, Menu, Search } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useCart } from "@/contexts/CartContext";
+import SearchOverlay from "@/components/SearchOverlay";
 
 const navItems = ["Shop", "Bundles", "Recipes", "Why Liimra"];
 
 const Header = memo(() => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { cartCount, openCart } = useCart();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[hsl(45_30%_95%/0.85)] border-b border-[hsl(var(--liimra-border))]">
       {/* Announcement bar */}
       <div className="bg-[hsl(var(--liimra-forest))] text-[hsl(45_30%_95%)] text-center py-1.5 font-body text-xs tracking-widest uppercase">
-        Free shipping above ₹299 · COD Available · Because healthy shouldn't cost more
+        Free shipping · COD Available · Because healthy shouldn't cost more
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 sm:h-16">
@@ -30,29 +32,43 @@ const Header = memo(() => {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-1">
-          {navItems.map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase().replace(/\s/g, "-")}`}
-              className="font-body text-xs tracking-[0.12em] uppercase px-4 py-2 rounded-full text-[hsl(var(--liimra-ink-light))] hover:bg-[hsl(var(--liimra-sage-light)/0.5)] hover:text-[hsl(var(--liimra-forest))] transition-all duration-300"
-            >
-              {item}
-            </a>
-          ))}
+          {navItems.map((item) => {
+            const isActive = item === "Shop";
+            return (
+              <a
+                key={item}
+                href={`#${item.toLowerCase().replace(/\s/g, "-")}`}
+                className={`font-body text-[14px] px-4 py-2 transition-all duration-300 relative ${
+                  isActive 
+                    ? "text-[#27500A] font-bold after:absolute after:bottom-1.5 after:left-4 after:right-4 after:h-[1.5px] after:bg-[#27500A]" 
+                    : "text-[#555] font-semibold hover:text-[#27500A]"
+                }`}
+              >
+                {item}
+              </a>
+            );
+          })}
         </nav>
 
-        {/* Right: Cart + Mobile Menu */}
+        {/* Right: Search + CTA + Cart + Mobile Menu */}
         <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setIsSearchOpen(true)}
+            aria-label="Search" 
+            className="hidden sm:flex p-[7px] rounded-full bg-[#eeeadd] hover:bg-[#e4dfcd] transition-colors text-[#2c2c1a]"
+          >
+            <Search size={16} strokeWidth={2.5} />
+          </button>
+
           <button
             onClick={openCart}
             aria-label="Open Cart"
-            className="relative p-3 rounded-full hover:bg-[hsl(var(--liimra-sage-light)/0.5)] transition-colors"
+            className="relative p-[9px] rounded-md transition-transform hover:scale-105 flex items-center justify-center bg-[#325220] shadow-sm ml-1"
           >
-            <ShoppingBag size={20} className="text-[hsl(var(--liimra-ink))]" />
+            <ShoppingCart size={18} className="text-white" strokeWidth={2.5} />
             {cartCount > 0 && (
               <span
-                className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 text-white text-[10px] font-body font-bold rounded-full flex items-center justify-center"
-                style={{ background: "#aeb30a", color: "#3e4c1d" }}
+                className="absolute -top-[7px] -right-[7px] w-[18px] h-[18px] text-white text-[10px] font-body font-bold rounded-full flex items-center justify-center bg-[#ef4444] shadow-sm border-2 border-[hsl(45_30%_95%)]"
               >
                 {cartCount}
               </span>
@@ -92,6 +108,8 @@ const Header = memo(() => {
           </Sheet>
         </div>
       </div>
+      
+      <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </header>
   );
 });
