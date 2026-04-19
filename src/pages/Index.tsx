@@ -170,7 +170,7 @@ const Index = () => {
             
             <div className="relative min-h-[120px] sm:min-h-[150px] flex flex-col items-center justify-center">
               <h1
-                className="text-[hsl(var(--liimra-ink))] animate-fadeIn"
+                className="text-[hsl(var(--liimra-ink))]"
                 style={{
                   fontFamily: "'Arial Black', 'Arial', sans-serif",
                   fontWeight: 900,
@@ -185,24 +185,11 @@ const Index = () => {
               </h1>
               
               <p 
-                className="font-body text-base sm:text-xl text-[hsl(var(--liimra-forest))] mt-4 sm:mt-6 font-medium animate-fadeIn opacity-90 max-w-2xl" 
+                className="font-body text-base sm:text-xl text-[hsl(var(--liimra-forest))] mt-4 sm:mt-6 font-medium opacity-90 max-w-2xl" 
               >
                 Stone-ground millet flours that taste amazing and help control blood sugar.
               </p>
             </div>
-
-            <style>{`
-              @keyframes fadeIn {
-                from {
-                  opacity: 0;
-                  transform: translate3d(0, 10px, 0);
-                }
-                to {
-                  opacity: 1;
-                  transform: translate3d(0, 0, 0);
-                }
-              }
-            `}</style>
 
             {/* Stats row â€” matrix layout */}
             <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-10 mt-8">
@@ -220,7 +207,7 @@ const Index = () => {
             </div>
 
             {/* Testimonial Quote */}
-            <div className="mt-10 mb-2 flex flex-col items-center animate-fadeIn" style={{ animationDelay: "0.2s", animationFillMode: "both" }}>
+            <div className="mt-10 mb-2 flex flex-col items-center">
               <p className="font-display text-[22px] sm:text-2xl text-[hsl(var(--liimra-ink))] italic max-w-xl leading-snug">
                 "My diabetic father's sugar levels improved in 3 weeks"
               </p>

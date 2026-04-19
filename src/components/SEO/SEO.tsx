@@ -50,9 +50,6 @@ export const SEO: React.FC<SEOProps> = ({
       {/* Theme Color for mobile */}
       <meta name="theme-color" content="#3e4c1d" />
 
-      {/* Preconnects for performance */}
-      <link rel="preconnect" href="https://connect.facebook.net" />
-      <link rel="preconnect" href="https://www.googletagmanager.com" />
     </Helmet>
   );
 };
