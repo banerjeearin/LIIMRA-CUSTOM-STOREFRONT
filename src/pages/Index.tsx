@@ -737,7 +737,7 @@ const Index = () => {
 
       </section>
       <Suspense fallback={<div style={{ minHeight: "100vh" }}></div>}>
-        <GoalSelectorSection />
+        <GoalSelectorSection onProductClick={handleProductClick} />
         <BundleSection />
         <RecipeSection />
         <ExpertVoicesSection />

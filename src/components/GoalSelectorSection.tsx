@@ -8,6 +8,7 @@ import { ProductSchema } from "@/components/SEO/StructuredData";
 import type { Product } from "@/data/products";
 import ViewingNow from "@/components/ViewingNow";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import TrustBadgeBar from "@/components/TrustBadgeBar";
 
 const OLIVE = "#3e4c1d";
 const NEON = "#aeb30a";
@@ -35,7 +36,7 @@ const Stars = memo(({ rating }: { rating: number }) => (
 
 Stars.displayName = "Stars";
 
-const ProductCard = memo(({ product }: { product: Product }) => {
+const ProductCard = memo(({ product, onProductClick }: { product: Product; onProductClick?: (id: string) => void }) => {
   const [hovered, setHovered] = useState(false);
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
   const [scienceExpanded, setScienceExpanded] = useState(false);
@@ -80,7 +81,7 @@ const ProductCard = memo(({ product }: { product: Product }) => {
 
       <div className="relative flex flex-col sm:flex-row items-stretch" style={{ zIndex: 1, minHeight: "300px" }}>
         <div
-          className="relative flex flex-col items-center justify-start shrink-0 overflow-hidden transition-all duration-500"
+          className="relative flex flex-col items-center justify-start shrink-0 overflow-hidden transition-all duration-500 cursor-pointer"
           style={{
             width: "100%",
             maxWidth: "360px",
@@ -88,13 +89,28 @@ const ProductCard = memo(({ product }: { product: Product }) => {
             background: product.imageBg,
             borderRadius: "1.5rem 0 0 1.5rem",
           }}
+          onClick={() => onProductClick?.(product.id)}
+          title="Click to view full product details"
         >
+          {/* Radial highlight */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background: "radial-gradient(ellipse at center, rgba(255,255,255,0.06) 20%, transparent 70%)",
             }}
           />
+          {/* Hover overlay — "View Details" */}
+          <div
+            className="absolute inset-0 flex items-end justify-center pb-14 pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+            style={{ background: "rgba(0,0,0,0.18)", borderRadius: "1.5rem 0 0 1.5rem", zIndex: 5 }}
+          >
+            <span
+              className="font-body text-[11px] font-bold tracking-[0.12em] uppercase px-4 py-2 rounded-full"
+              style={{ background: "rgba(174,179,10,0.90)", color: "#1e2608" }}
+            >
+              View Details →
+            </span>
+          </div>
           
           {/* Main Primary Image */}
           <div className="relative flex items-center justify-center w-full" style={{ flex: scienceExpanded ? "0 0 auto" : "1 1 auto", minHeight: "300px", paddingTop: scienceExpanded ? "2rem" : "0" }}>
@@ -160,7 +176,7 @@ const ProductCard = memo(({ product }: { product: Product }) => {
           </div>
         </div>
 
-        <div className="flex flex-col justify-center flex-1 px-8 py-8 gap-4">
+        <div className="flex flex-col justify-center flex-1 px-8 py-8 gap-4 min-w-0 max-w-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <Stars rating={product.rating} />
@@ -230,7 +246,7 @@ const ProductCard = memo(({ product }: { product: Product }) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-6 mt-auto pt-4" style={{ borderTop: "1px solid hsl(72 18% 92%)" }}>
+          <div className="flex items-center justify-between gap-4 mt-auto pt-4" style={{ borderTop: "1px solid hsl(72 18% 92%)" }}>
             <div>
               <div className="font-body text-xs text-[hsl(var(--liimra-ink-light))] line-through">
                 MRP ₹{selectedSize.mrp}
@@ -252,25 +268,27 @@ const ProductCard = memo(({ product }: { product: Product }) => {
               </div>
             </div>
 
-            <div className="flex items-center gap-3 ml-auto">
-              <button
-                onClick={handleAddToCart}
-                className="font-body text-xs tracking-[0.12em] uppercase px-6 py-3 rounded-full flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                style={{
-                  background: OLIVE,
-                  color: "white",
-                  boxShadow: hovered ? "0 4px 16px rgba(62,76,29,0.30)" : "0 2px 8px rgba(62,76,29,0.15)",
-                  willChange: "transform, box-shadow",
-                }}
-              >
-                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none stroke-2 shrink-0">
-                  <circle cx="9" cy="21" r="1" />
-                  <circle cx="20" cy="21" r="1" />
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                </svg>
-                Add to Cart
-              </button>
-            </div>
+            <button
+              onClick={handleAddToCart}
+              className="font-body text-xs tracking-[0.12em] uppercase px-6 py-3 rounded-full flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:shadow-lg flex-shrink-0"
+              style={{
+                background: OLIVE,
+                color: "white",
+                boxShadow: hovered ? "0 4px 16px rgba(62,76,29,0.30)" : "0 2px 8px rgba(62,76,29,0.15)",
+                willChange: "transform, box-shadow",
+              }}
+            >
+              <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none stroke-2 shrink-0">
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
+              Add to Cart
+            </button>
+          </div>
+
+          <div className="w-full">
+            <TrustBadgeBar />
           </div>
 
           <button
@@ -364,7 +382,7 @@ const ProductCard = memo(({ product }: { product: Product }) => {
 
 ProductCard.displayName = "ProductCard";
 
-const GoalSelectorSection = memo(() => {
+const GoalSelectorSection = memo(({ onProductClick }: { onProductClick?: (id: string) => void }) => {
   const [activeGoal, setActiveGoal] = useState("all");
   const { products, isLoading, error, getProductsByGoal } = useProducts();
   const visibleProducts = useMemo(() => getProductsByGoal(activeGoal), [activeGoal, getProductsByGoal]);
@@ -475,7 +493,7 @@ const GoalSelectorSection = memo(() => {
 
         <div className="flex flex-col gap-5">
           {visibleProducts.map((p) => (
-            <ProductCard key={p.id} product={p} />
+            <ProductCard key={p.id} product={p} onProductClick={onProductClick} />
           ))}
         </div>
       </div>

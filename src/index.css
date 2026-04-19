@@ -1228,3 +1228,34 @@ img {
   text-decoration: underline;
 }
 
+/* ── Trust Badge Bar ── */
+@keyframes trust-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.trust-badge-track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: trust-scroll 18s linear infinite;
+}
+
+.trust-badge-track:hover {
+  animation-play-state: paused;
+}
+
+.trust-badge-item {
+  cursor: default;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.trust-badge-item:hover {
+  transform: translateY(-1px);
+  opacity: 0.85;
+}
+

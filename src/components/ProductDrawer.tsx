@@ -6,6 +6,8 @@ import { useCart } from "@/contexts/CartContext";
 import { useAnalytics } from "@/contexts/AnalyticsContext";
 import { sendProductInquiry } from "@/services/whatsapp";
 import ViewingNow from "@/components/ViewingNow";
+import TrustBadgeBar from "@/components/TrustBadgeBar";
+import type { Product } from "@/data/products";
 
 const OLIVE = "#3e4c1d";
 const NEON = "#aeb30a";
@@ -17,6 +19,98 @@ interface ProductDrawerProps {
   onNavigate: (direction: "prev" | "next") => void;
 }
 
+// ── Image Gallery Sub-component ─────────────────────────────────────────────
+const ImageGallery = memo(({ product }: { product: Product }) => {
+  const allImages = [product.image, ...(product.images?.slice(1) ?? [])].filter(Boolean);
+  const [activeImg, setActiveImg] = useState(0);
+  const hasManyImages = allImages.length > 1;
+
+  // Reset to first image when product changes
+  useEffect(() => { setActiveImg(0); }, [product.id]);
+
+  return (
+    <div className="mb-6">
+      {/* Main image viewer */}
+      <div
+        className="relative rounded-2xl overflow-hidden"
+        style={{ background: "white", aspectRatio: "4/3" }}
+      >
+        <img
+          key={activeImg}
+          src={allImages[activeImg]}
+          alt={`${product.name} ${activeImg + 1}`}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-contain transition-opacity duration-300"
+          style={{ filter: "drop-shadow(0 8px 20px rgba(0,0,0,0.12))", padding: "20px" }}
+        />
+        {/* Nav arrows — only when multiple images */}
+        {hasManyImages && (
+          <>
+            <button
+              onClick={() => setActiveImg((p) => (p - 1 + allImages.length) % allImages.length)}
+              className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+              style={{ background: "rgba(62,76,29,0.85)", color: "white" }}
+              aria-label="Previous image"
+            >
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-current stroke-2">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setActiveImg((p) => (p + 1) % allImages.length)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
+              style={{ background: "rgba(62,76,29,0.85)", color: "white" }}
+              aria-label="Next image"
+            >
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-current stroke-2">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+            {/* Counter badge */}
+            <div
+              className="absolute bottom-3 right-3 font-body text-[10px] font-bold px-2 py-1 rounded-full"
+              style={{ background: "rgba(62,76,29,0.75)", color: "white" }}
+            >
+              {activeImg + 1} / {allImages.length}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Thumbnail strip — only when multiple images */}
+      {hasManyImages && (
+        <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
+          {allImages.map((src, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveImg(i)}
+              className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden transition-all duration-200"
+              style={{
+                border: activeImg === i ? "2px solid #3e4c1d" : "2px solid transparent",
+                background: "white",
+                opacity: activeImg === i ? 1 : 0.55,
+                transform: activeImg === i ? "scale(1.05)" : "scale(1)",
+              }}
+              aria-label={`View image ${i + 1}`}
+            >
+              <img
+                src={src}
+                alt={`${product.name} thumbnail ${i + 1}`}
+                className="w-full h-full object-contain p-1"
+                loading="lazy"
+              />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+});
+
+ImageGallery.displayName = "ImageGallery";
+
+// ── Product Drawer ────────────────────────────────────────────────────────────
 const ProductDrawer = memo(({ isOpen, onClose, productId, onNavigate }: ProductDrawerProps) => {
   const { products, getProduct } = useProducts();
   const { addItem, openCart } = useCart();
@@ -106,16 +200,7 @@ const ProductDrawer = memo(({ isOpen, onClose, productId, onNavigate }: ProductD
         </div>
 
         <div className="flex-1 overflow-y-auto px-6 py-6">
-          <div className="relative mb-6 p-8 rounded-2xl" style={{ background: "white" }}>
-            <img
-              src={product.image}
-              alt={product.name}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-64 object-contain"
-              style={{ filter: "drop-shadow(0 10px 28px rgba(0,0,0,0.15))" }}
-            />
-          </div>
+          <ImageGallery product={product} />
 
           <div className="flex items-center gap-2 mb-4">
             <div className="flex items-center gap-1">
@@ -239,10 +324,8 @@ const ProductDrawer = memo(({ isOpen, onClose, productId, onNavigate }: ProductD
             </div>
           </div>
 
-          <div className="pt-6 border-t border-[hsl(var(--liimra-border))] flex flex-wrap gap-4 justify-center text-xs font-body pb-4" style={{ color: "hsl(var(--liimra-ink-light))" }}>
-            <span>✓ 48hr fresh</span>
-            <span>✓ FSSAI Certified</span>
-            <span>✓ WhatsApp support</span>
+          <div className="pt-4 pb-2">
+            <TrustBadgeBar />
           </div>
         </div>
 
