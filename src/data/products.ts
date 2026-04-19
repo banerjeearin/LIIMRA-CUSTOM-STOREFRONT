@@ -4,6 +4,7 @@ export interface ProductSize {
   price: number;
   discount: number;
   variantId?: string;
+  stock?: number;
 }
 
 export interface NutrientHighlight {
@@ -83,7 +84,7 @@ export const products: Product[] = [
     imageBg: "linear-gradient(160deg, hsl(74 30% 26%), hsl(74 35% 18%))",
     tagline: "💚 Kids love it. Moms trust it. Doctors recommend it.",
     sizes: [
-      { size: "250g", mrp: 139, price: 109, discount: 22 },
+      { size: "250g", mrp: 139, price: 109, discount: 22, stock: 10 },
       { size: "500g", mrp: 199, price: 159, discount: 20 },
       { size: "1kg", mrp: 369, price: 289, discount: 22 },
     ],
