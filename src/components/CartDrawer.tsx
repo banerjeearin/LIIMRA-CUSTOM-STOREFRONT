@@ -340,9 +340,12 @@ const CartDrawer = memo(() => {
                   <span>₹{totalDiscount.toFixed(2)} ({discountPercentage}% off)</span>
                 </div>
               )}
-              <div className="flex justify-between font-display text-[20px] pt-1 mt-1 border-t" style={{ color: INK, borderColor: BORDER }}>
-                <span>Total</span>
-                <span>₹{total.toFixed(2)}</span>
+              <div className="flex justify-between items-end pt-1 mt-1 border-t" style={{ borderColor: BORDER }}>
+                <div className="flex flex-col">
+                  <span className="font-display text-[20px] leading-none mb-1" style={{ color: INK }}>Total</span>
+                  <span className="font-body text-[9px] text-[#888] leading-none">Inclusive of taxes</span>
+                </div>
+                <span className="font-display text-[20px] leading-none" style={{ color: INK }}>₹{total.toFixed(2)}</span>
               </div>
             </div>
 

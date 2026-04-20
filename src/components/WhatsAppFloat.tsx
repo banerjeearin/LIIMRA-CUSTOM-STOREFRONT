@@ -1,7 +1,7 @@
 import { MessageCircle } from "lucide-react";
 
 const WhatsAppFloat = () => {
-  const phoneNumber = "919999999999"; // Replace with actual Liimra WhatsApp number
+  const phoneNumber = "919321731372"; // Replace with actual Liimra WhatsApp number
   const message = "Hi Liimra Naturals, I have a question about your millets.";
   const waLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 

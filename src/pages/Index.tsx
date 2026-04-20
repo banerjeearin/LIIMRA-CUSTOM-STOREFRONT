@@ -221,7 +221,7 @@ const Index = () => {
             {/* Primary CTA */}
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-7">
               <a href="#shop" className="font-body text-sm tracking-[0.12em] uppercase px-8 sm:px-10 py-4 sm:py-5 rounded-full bg-[hsl(var(--liimra-forest))] text-[hsl(var(--liimra-cream))] hover:scale-105 transition-transform duration-300 shadow-xl font-semibold" style={{ willChange: "transform" }}>
-                Shop Now — From ₹99
+                SHOP NOW - LOWEST PRICE
               </a>
               <a href="#bundles" className="font-body text-sm tracking-[0.12em] uppercase px-8 sm:px-10 py-4 sm:py-5 rounded-full border-2 border-[hsl(var(--liimra-forest))] text-[hsl(var(--liimra-forest))] hover:bg-[hsl(var(--liimra-forest)/0.05)] transition-all duration-300 font-semibold" style={{ willChange: "background-color" }}>
                 View Bundles
