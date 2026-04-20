@@ -14,7 +14,6 @@ const BADGES: Badge[] = [
   { icon: "🔒", label: "Secure Checkout", sublabel: "SSL encrypted" },
   { icon: "🚚", label: "Free Shipping", sublabel: "All orders" },
   { icon: "🏅", label: "FSSAI Certified", sublabel: "Quality assured" },
-  { icon: "🔄", label: "Easy Returns", sublabel: "7-day policy" },
   { icon: "⚡", label: "48hr Fresh", sublabel: "Stone cold milled" },
 ];
 
