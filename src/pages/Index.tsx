@@ -40,20 +40,19 @@ const BASE_CARD_CONFIG = [
 ];
 
 function getDeckParams(width: number) {
-  // Added ~180px to deckTop and paddingBottom to accommodate the new testimonial and headlines
   if (width < 400) {
-    return { cardWidth: 140, scale: 0.42, deckTop: 610, deckHeight: 280, paddingBottom: 220 };
+    return { cardWidth: 140, scale: 0.42, deckHeight: 280, paddingBottom: 220 };
   }
   if (width < 640) {
-    return { cardWidth: 160, scale: 0.50, deckTop: 650, deckHeight: 320, paddingBottom: 250 };
+    return { cardWidth: 160, scale: 0.50, deckHeight: 320, paddingBottom: 250 };
   }
   if (width < 768) {
-    return { cardWidth: 200, scale: 0.60, deckTop: 680, deckHeight: 360, paddingBottom: 280 };
+    return { cardWidth: 200, scale: 0.60, deckHeight: 360, paddingBottom: 280 };
   }
   if (width < 1024) {
-    return { cardWidth: 260, scale: 0.75, deckTop: 650, deckHeight: 430, paddingBottom: 330 };
+    return { cardWidth: 260, scale: 0.75, deckHeight: 430, paddingBottom: 330 };
   }
-  return { cardWidth: 340, scale: 1.0,  deckTop: 710, deckHeight: 500, paddingBottom: 380 };
+  return { cardWidth: 340, scale: 1.0,  deckHeight: 500, paddingBottom: 380 };
 }
 
 const Index = () => {
@@ -111,7 +110,7 @@ const Index = () => {
     });
   }, [setSelectedProductId]);
 
-  const { cardWidth, scale, deckTop, deckHeight, paddingBottom } = useMemo(
+  const { cardWidth, scale, deckHeight, paddingBottom } = useMemo(
     () => getDeckParams(vw),
     [vw]
   );
@@ -237,7 +236,7 @@ const Index = () => {
         {/* â”€â”€ Fanned product deck â”€â”€ */}
         <div
           className="absolute left-0 right-0 flex justify-center items-end pointer-events-none"
-          style={{ top: `${deckTop}px`, height: `${deckHeight}px`, perspective: "1600px", zIndex: 20 }}
+          style={{ bottom: 0, height: `${deckHeight}px`, perspective: "1600px", zIndex: 20 }}
         >
           {deckCards.map((card, i) => {
             const cfg = cardConfig[i];
@@ -252,8 +251,8 @@ const Index = () => {
                 style={{
                   transformOrigin: "50% 100%",
                   transform: isHovered
-                    ? `translate3d(${cfg.translateX}px, ${cfg.translateY - 20}px, 0) rotate(${cfg.rotate * 0.4}deg)`
-                    : `translate3d(${cfg.translateX}px, ${cfg.translateY}px, 0) rotate(${cfg.rotate}deg)`,
+                    ? `translate(${cfg.translateX}px, ${cfg.translateY - 20}px) rotate(${cfg.rotate * 0.4}deg)`
+                    : `translate(${cfg.translateX}px, ${cfg.translateY}px) rotate(${cfg.rotate}deg)`,
                   zIndex: isHovered ? 100 : 20 + i,
                   transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
                   willChange: isHovered ? "transform" : "auto",
