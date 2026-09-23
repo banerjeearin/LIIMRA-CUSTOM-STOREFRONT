@@ -1,5 +1,5 @@
 import { useState, memo } from "react";
-import { Instagram, Facebook, Mail } from "lucide-react";
+import { Instagram, Facebook, Mail, MapPin } from "lucide-react";
 import PolicyModal from "@/components/ui/PolicyModal";
 import type { PolicyType } from "@/services/api/types";
 
@@ -323,6 +323,14 @@ const Footer = memo(() => {
               >
                 <Mail size={16} className="text-white" />
               </a>
+            </div>
+            <div className="flex items-start gap-2.5 mt-5 text-white/70 font-body text-xs leading-relaxed">
+              <MapPin size={16} className="text-[#aeb30a] flex-shrink-0 mt-0.5" />
+              <address className="not-italic">
+                Office No. 314, Niharika Mirage, Juhi Habitat,<br />
+                Plot No. 274, Sector No. 10, Kharghar, Panvel City,<br />
+                Raigad, Maharashtra – 410210
+              </address>
             </div>
           </div>
 

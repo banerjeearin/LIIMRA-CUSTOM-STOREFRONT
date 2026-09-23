@@ -19,12 +19,22 @@ export const OrganizationSchema = () => {
     "@type": "Organization",
     "url": "https://liimranaturals.com",
     "name": "Liimra Naturals",
+    "legalName": "Liimra Enterprises",
     "logo": "https://liimranaturals.com/favicon-32.png",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Office No. 314, Niharika Mirage, Juhi Habitat, Plot No. 274, Sector No. 10, Kharghar",
+      "addressLocality": "Panvel City, Raigad",
+      "addressRegion": "Maharashtra",
+      "postalCode": "410210",
+      "addressCountry": "IN"
+    },
     "contactPoint": [
       {
         "@type": "ContactPoint",
-        "telephone": "+91-9999999999", // Placeholder
-        "contactType": "customer service"
+        "telephone": "+91-93217-31372",
+        "contactType": "customer service",
+        "email": "hello@liimra.com"
       }
     ],
     "sameAs": [
