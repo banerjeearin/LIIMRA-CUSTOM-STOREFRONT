@@ -387,26 +387,41 @@ const Footer = memo(() => {
             <h4 className="font-body text-xs font-bold tracking-[0.15em] uppercase mb-4 text-white/70">
               Trust
             </h4>
-            <ul className="space-y-2.5">
-              <li className="flex items-center gap-2">
-                <svg viewBox="0 0 24 24" className="w-4 h-4 flex-shrink-0" fill="none" stroke={NEON} strokeWidth="2">
+            <ul className="space-y-3">
+              <li className="flex items-start gap-2.5">
+                <svg viewBox="0 0 24 24" className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke={NEON} strokeWidth="2">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
-                <span className="font-body text-sm text-white/70">FSSAI Certified</span>
+                <div>
+                  <span className="font-body text-sm text-white/90 block">FSSAI Certified</span>
+                  <span className="font-body text-xs text-white/60">Lic: 11524016000413</span>
+                </div>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-start gap-2.5">
+                <svg viewBox="0 0 24 24" className="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke={NEON} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="4" width="18" height="16" rx="2" />
+                  <line x1="7" y1="8" x2="17" y2="8" />
+                  <line x1="7" y1="12" x2="17" y2="12" />
+                  <line x1="7" y1="16" x2="13" y2="16" />
+                </svg>
+                <div>
+                  <span className="font-body text-sm text-white/90 block">GST Registered</span>
+                  <span className="font-body text-xs text-white/60">GSTIN: 27AAIFL8311R1ZO</span>
+                </div>
+              </li>
+              <li className="flex items-center gap-2.5">
                 <svg viewBox="0 0 24 24" className="w-4 h-4 flex-shrink-0" fill="none" stroke={NEON} strokeWidth="2">
                   <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
                 </svg>
                 <span className="font-body text-sm text-white/70">Ships in 48 Hours</span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-2.5">
                 <svg viewBox="0 0 24 24" className="w-4 h-4 flex-shrink-0" fill="none" stroke={NEON} strokeWidth="2">
                   <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                 </svg>
                 <span className="font-body text-sm text-white/70">Made in India</span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-2.5">
                 <svg viewBox="0 0 24 24" className="w-4 h-4 flex-shrink-0" fill="none" stroke={NEON} strokeWidth="2">
                   <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                 </svg>

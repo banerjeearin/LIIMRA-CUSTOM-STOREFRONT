@@ -20,6 +20,7 @@ export const OrganizationSchema = () => {
     "url": "https://liimranaturals.com",
     "name": "Liimra Naturals",
     "legalName": "Liimra Enterprises",
+    "taxID": "27AAIFL8311R1ZO",
     "logo": "https://liimranaturals.com/favicon-32.png",
     "address": {
       "@type": "PostalAddress",
